@@ -1,0 +1,53 @@
+{
+  "productos": [
+    {
+      "sku": "MASAJ-RELAX-60",
+      "nombre": "Masaje Relajación 60'",
+      "price": 18990,
+      "imagen": "/assets/img/masaje60.jpg",
+      "duracion": 60,
+      "categoria": "Masajes",
+      "descripcion": "Terapia de relajación de cuerpo completo.",
+      "stock": 10,
+      "rating": 4.7
+    },
+    {
+      "sku": "LIMPFACIAL-CLASS",
+      "nombre": "Limpieza Facial Clásica",
+      "price": 14990,
+      "imagen": "/assets/img/limpieza.jpg",
+      "duracion": 45,
+      "categoria": "Faciales",
+      "descripcion": "Limpieza profunda con extracción suave.",
+      "stock": 8,
+      "rating": 4.5
+    }
+  ],
+  "blogs": [
+    {
+      "id": 1,
+      "titulo": "Respiración consciente: reduce el estrés en 5 minutos",
+      "resumen": "Técnica breve para bajar el cortisol.",
+      "contenido": "Paso 1: ... Paso 2: ...",
+      "imagen": "/assets/img/blog-respiracion.jpg",
+      "fecha": "2025-09-20",
+      "autor": "Equipo Bosque SPA"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Pamela",
+      "email": "pamela@duoc.cl",
+      "password": "1234",
+      "rol": "cliente"
+    },
+    {
+      "id": 2,
+      "nombre": "Admin",
+      "email": "admin@bosquespa.cl",
+      "password": "admin",
+      "rol": "admin"
+    }
+  ]
+}
