@@ -1,0 +1,165 @@
+/* Colores y detalles propios */
+/* === Paleta SPA del Bosque (desde el logo) ===
+   0CA695  → verde hoja (principal)
+   99D2CB  → verde agua (suave)
+   9C9C9C  → gris medio (texto secundario)
+   B6B6B6  → gris claro (borde)
+   F0F6F4  → verde muy claro (fondo sutil)
+*/
+:root {
+  /* principal */
+  --brand: #0CA695;
+  /* acento suave */
+  --brand-2: #99D2CB;
+  /* texto secundario */
+  --gray-6: #9C9C9C;
+  /* bordes/lines */
+  --gray-4: #B6B6B6;
+  /* fondos suaves */
+  --mint-1: #F0F6F4;
+
+  /* Cambiar colores de bootstrap */
+  --bs-primary: var(--brand);
+  --bs-primary-rgb: 12, 166, 149;
+
+  /* unificarlas */
+  --bs-success: var(--brand);
+  --bs-success-rgb: 12, 166, 149;
+
+  /* texto general */
+  --bs-body-color: #222;
+
+  /* texto secundario */
+  --bs-secondary-color: #555;
+
+  --bs-border-color: var(--gray-4);
+}
+/* === Estructura de la página === */
+html, body {
+  height: 100%;           /* importante para que 100vh funcione bien */
+}
+
+/*body {
+  min-height: 100vh;      ocupa al menos la altura de la ventana 
+  display: flex;
+  flex-direction: column;  vertical 
+}
+
+main {
+  flex: 1;                se expande para empujar el footer hacia abajo 
+}                         se mueve a AppLayout.jsx */
+
+/* Utilidades propias */
+.text-brand {
+  color: var(--brand) !important;
+}
+
+.bg-brand {
+  background: var(--brand) !important;
+  color: #fff !important;
+}
+
+.bg-mint {
+  background: var(--mint-1) !important;
+}
+
+.border-soft {
+  border-color: var(--gray-4) !important;
+}
+
+.navbar-brand {
+  font-weight: 600;
+  color: var(--brand) !important;
+}
+
+.lead {
+  color: var(--gray-6);
+}
+
+/* === Cards === */
+.hover-card .card-img-top {
+  height: 250px;
+  object-fit: cover;
+}
+
+.hover-card {
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .09);
+}
+
+.card-img-top {
+  height: 220px;   /* altura fija */
+  object-fit: cover;
+}
+
+
+/* ===Hero Responsive=== */
+@media (max-width: 575px) {
+  header .btn-lg {
+    width: 100%;
+  }
+}
+
+/* margen de scroll para las secciones con ancla */
+.anchor-section{ scroll-margin-top: 90px; }
+
+/* === Botones Success personalizados === */
+.btn-success {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--brand);
+  --bs-btn-border-color: var(--brand);
+
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #09947f;   /* un poco más oscuro */
+  --bs-btn-hover-border-color: #09947f;
+
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #087868;  /* más oscuro aún */
+  --bs-btn-active-border-color: #087868;
+
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--brand);
+  --bs-btn-disabled-border-color: var(--brand);
+}
+
+/* Outline Success */
+.btn-outline-success {
+  --bs-btn-color: var(--brand);
+  --bs-btn-border-color: var(--brand);
+
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--brand);
+  --bs-btn-hover-border-color: var(--brand);
+
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #087868;
+  --bs-btn-active-border-color: #087868;
+
+  --bs-btn-disabled-color: var(--brand);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--brand);
+}
+#cartCount { display: inline-block !important; }
+
+/* Ajuste fino del badge del carrito */
+.badge-cart{
+  font-size: .65rem;
+  padding: .25em .35em;
+  /* corrige leve solape con el borde del botón */
+  transform: translate(-55%, -40%) !important;
+}
+
+/* En móviles, se oculta el texto "Carrito" y dejar solo el ícono */
+@media (max-width: 575px){
+  .link-carrito .d-sm-inline { display: none !important; }
+}
+
+/* chips más compactos dentro del modal */
+#therapists .btn, #days .btn { border-radius: 999px; }
+
+/* botón de slot seleccionado */
+.slot.active { background: var(--bs-success); color: #fff; border-color: var(--bs-success); }
