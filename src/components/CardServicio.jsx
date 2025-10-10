@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
-export default function CardServicio({ input}) {
-  const s = input.servicio ?? input; 
+export default function CardServicio({ servicio, ...rest}) {
+  const s = servicio ?? rest;
   if (!s || !s.sku) return null;
 
   const { sku, nombre, precio, img, categoria, duracionMin } = s;

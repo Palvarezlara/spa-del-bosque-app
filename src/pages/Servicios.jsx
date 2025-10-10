@@ -1,5 +1,6 @@
-
-import { SERVICIOS } from '../data/data';
+import { useEffect, useState } from 'react';
+import { getServicios } from '../data/api';
+import { SERVICIOS as LOCAL_SERV } from '../data/data';
 import CardServicio from '../components/CardServicio';
 
 
@@ -10,7 +11,7 @@ const CATEGORIAS = [
   { id: 'individuales', label: 'Programas individuales' },
   { id: 'parejas', label: 'Programas en pareja' },
   { id: 'escapada-amigas', label: 'Escapada de amigas' },
-]
+];
 
 const CLP = new Intl.NumberFormat('es-CL', {
   style: 'currency',
@@ -19,6 +20,17 @@ const CLP = new Intl.NumberFormat('es-CL', {
 })
 
 export default function Servicios() {
+  const [servicios, setServicios] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getServicios()
+      .then(data => setServicios(data.servicios ?? []))
+      .catch(() => setServicios(LOCAL_SERV ?? [])) // fallback si mockable no responde
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div className="container py-4">Cargando servicios...</div>
 
   return (
     <div className="container py-4">
@@ -32,11 +44,12 @@ export default function Servicios() {
           </a>
         ))}
       </nav>
-    
+
 
       {/* Secciones por categoría */}
       {CATEGORIAS.map(cat => {
-        const serviciosCat = SERVICIOS.filter(s => s.categoria === cat.id)
+        const serviciosCat = servicios
+        .filter(s => s.categoria === cat.id)
 
         return (
           <section key={cat.id} id={cat.id} className="mb-5 anchor-section">
@@ -45,7 +58,7 @@ export default function Servicios() {
               {serviciosCat.map(serv => (
                 <CardServicio key={serv.sku} servicio={serv} />
               ))}
-             </div>
+            </div>
           </section>
         )
       })}
