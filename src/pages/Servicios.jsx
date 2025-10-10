@@ -48,7 +48,8 @@ export default function Servicios() {
 
       {/* Secciones por categoría */}
       {CATEGORIAS.map(cat => {
-        const serviciosCat = servicios.filter(s => s.categoria === cat.id)
+        const serviciosCat = servicios
+        .filter(s => s.categoria === cat.id)
 
         return (
           <section key={cat.id} id={cat.id} className="mb-5 anchor-section">
