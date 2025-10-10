@@ -1,0 +1,1 @@
+export default function CompraExitosa() { return <h2>Compra Exitosa</h2>; }

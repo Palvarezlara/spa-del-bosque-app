@@ -1,0 +1,1 @@
+export default function CompraError() { return <h2>Error en la Compra</h2>; }

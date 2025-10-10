@@ -1,0 +1,1 @@
+export default function BlogDetalle() { return <h2>Blog Detalle</h2>; }
