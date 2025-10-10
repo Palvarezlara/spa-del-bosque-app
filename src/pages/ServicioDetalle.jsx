@@ -1,0 +1,1 @@
+export default function ServicioDetalle() { return <h2>Servicio Detalle</h2>; }

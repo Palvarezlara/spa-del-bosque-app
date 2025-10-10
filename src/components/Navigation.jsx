@@ -1,9 +1,13 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { useCart } from '../context/CartContext';
 import logo from '../assets/logo.png';
 
 export default function Navigation() {
-  const usuario = null;           // luego vendrá de AuthContext
-  const cartCount= 0;      // luego vendrá de CartContext
+  const { count } = useCart();           //items en el carrito
+  //const navigate = useNavigate();       
+
+  // Más adelante esto vendrá de un AuthContext (o localStorage).
+  const usuario = null; // O un objeto { nombre: "Ana" }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -39,27 +43,27 @@ export default function Navigation() {
           {/* Links izquierda */}
           <ul className="navbar-nav me-lg-auto">
             <li className="nav-item">
-              <NavLink to="/" end className={({isActive}) => "nav-link" + (isActive ? " active" : "")}>
+              <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
                 Home
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/servicios" className={({isActive}) => "nav-link" + (isActive ? " active" : "")}>
+              <NavLink to="/servicios" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
                 Servicios
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/blogs" className={({isActive}) => "nav-link" + (isActive ? " active" : "")}>
+              <NavLink to="/blogs" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
                 Blogs
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/nosotros" className={({isActive}) => "nav-link" + (isActive ? " active" : "")}>
+              <NavLink to="/nosotros" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
                 Nosotros
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/contacto" className={({isActive}) => "nav-link" + (isActive ? " active" : "")}>
+              <NavLink to="/contacto" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
                 Contacto
               </NavLink>
             </li>
@@ -70,18 +74,21 @@ export default function Navigation() {
             {/* Carrito: outline success + badge */}
             <NavLink
               to="/carrito"
-              className={({isActive}) =>
+              className={({ isActive }) =>
                 "btn btn-outline-success position-relative" + (isActive ? " active" : "")
               }
             >
               {/* Ícono (requiere bootstrap-icons) */}
               <i className="bi bi-cart3 me-1" aria-hidden="true"></i>
-              <span
-                id="cartCount"
-                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success badge-cart"
-              >
-                {cartCount}
-              </span>
+              {/* Volver aqui si quiero que sea vea el cero */}
+              {count > 0 && (
+                <span
+                  id="cartCount"
+                  className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success badge-cart"
+                >
+                  {count}
+                </span>
+              )}
               <span className="visually-hidden">items en el carrito</span>
             </NavLink>
 
