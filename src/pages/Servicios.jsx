@@ -1,6 +1,6 @@
 
-import { Link } from 'react-router-dom'
-import { SERVICIOS } from '../data/data'
+import { SERVICIOS } from '../data/data';
+import CardServicio from '../components/CardServicio';
 
 
 const CATEGORIAS = [
@@ -19,6 +19,7 @@ const CLP = new Intl.NumberFormat('es-CL', {
 })
 
 export default function Servicios() {
+
   return (
     <div className="container py-4">
       <h1 className="h3 mb-4">Nuestros servicios</h1>
@@ -31,6 +32,7 @@ export default function Servicios() {
           </a>
         ))}
       </nav>
+    
 
       {/* Secciones por categoría */}
       {CATEGORIAS.map(cat => {
@@ -41,35 +43,9 @@ export default function Servicios() {
             <h2 className="h5 mb-3">{cat.label}</h2>
             <div className="row g-3">
               {serviciosCat.map(serv => (
-                <div key={serv.sku} className="col-12 col-md-6 col-lg-4">
-                  <div className="card h-100 shadow-sm">
-                    <img
-                      src={serv.img}
-                      alt={serv.nombre}
-                      className="card-img-top"
-                    />
-                    <div className="card-body d-flex flex-column">
-                      <h3 className="h6">
-                        {serv.nombre}{' '}
-                        {serv.duracionMin && (
-                          <i className="bi bi-clock ms-1"></i>
-                        )}
-                      </h3>
-                      <p className="text-muted mb-2">{CLP.format(serv.precio)}</p>
-                      <div className="d-grid gap-2 mt-auto">
-                        <Link
-                          to={`/producto/${serv.sku}`}
-                          className="btn btn-outline-success"
-                        >
-                          Ver detalle
-                        </Link>
-                        <button className="btn btn-success">Agregar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <CardServicio key={serv.sku} servicio={serv} />
               ))}
-            </div>
+             </div>
           </section>
         )
       })}
