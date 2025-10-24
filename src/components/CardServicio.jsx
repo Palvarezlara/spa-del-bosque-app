@@ -8,7 +8,7 @@ export default function CardServicio({ servicio, ...rest}) {
 
   const { sku, nombre, precio, img, categoria, duracionMin } = s;
 
-  // Manejo de imagen: si es URL o path, usar directamente; si es import, usar .default
+  // Manejo de imagen
   const imgSrc = typeof img === 'string' ? img : (img?.default ?? '');
 
 
