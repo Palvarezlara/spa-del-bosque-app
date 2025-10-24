@@ -38,6 +38,7 @@
 html, body {
   height: 100%;           /* importante para que 100vh funcione bien */
 }
+html { scroll-behavior: smooth; }
 
 /*body {
   min-height: 100vh;      ocupa al menos la altura de la ventana 

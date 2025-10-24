@@ -1,14 +1,15 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import masajesImg from '../assets/Categorias/Masajes.png'
-import corporalesImg from '../assets/Categorias/corporales.png'
-import circuitoSaunaImg from '../assets/Categorias/Circuito-Sauna.png'
-import programaIndividualesImg from '../assets/Categorias/Programas-individuales.png'
-import programaParejasImg from '../assets/categorias/Programas-en-pareja.png'
-import escapadaAmigasImg from '../assets/categorias/EscapadaAmigas.png'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import masajesImg from '../assets/Categorias/Masajes.png';
+import corporalesImg from '../assets/Categorias/corporales.png';
+import circuitoSaunaImg from '../assets/Categorias/Circuito-Sauna.png';
+import programaIndividualesImg from '../assets/Categorias/Programas-individuales.png';
+import programaParejasImg from '../assets/categorias/Programas-en-pareja.png';
+import escapadaAmigasImg from '../assets/categorias/EscapadaAmigas.png';
 
 
-// Cada categoría tiene título, imagen y ancla (id de sección en productos)
+
+// Cada categoría tiene título, imagen y ancla 
 const categorias = [
   { nombre: 'Masajes', img: masajesImg, id: 'masajes' },
   { nombre: 'Tratamientos corporales', img: corporalesImg , id: 'corporales' },
