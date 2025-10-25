@@ -1,13 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    react({
-      babel: {
-        plugins: [['babel-plugin-react-compiler']],
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/mock': {
+        target: 'https://demo6694663.mockable.io',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/mock/, ''),
       },
-    }),
-  ],
+    },
+  },
 })
