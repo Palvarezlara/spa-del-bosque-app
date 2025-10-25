@@ -1,5 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import heroImg from '../assets/front.png';
 
 export default function HeroSection() {
   return (
@@ -21,10 +22,13 @@ export default function HeroSection() {
             <Link to="/servicios" className="btn btn-success btn-lg">Ver servicios</Link>
           </div>
           <div className="col-12 col-md-6">
-            <img 
-            src="src/assets/front.png" 
-            className="img-fluid rounded shadow-sm"
-            alt="Entrada SPA" />
+            <img
+              src={heroImg}
+              className="img-fluid rounded shadow-sm"
+              alt="Entrada SPA"
+              width={520}
+              height={320}
+              loading="lazy" />
 
           </div>
         </div>
