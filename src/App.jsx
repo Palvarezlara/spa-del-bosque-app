@@ -9,9 +9,8 @@ import Login from './pages/Login';
 import Carrito from './pages/Carrito';
 import CompraExitosa from './pages/CompraExitosa';
 import CompraError from './pages/CompraError';
-
-// Páginas mínimas para probar
-
+import Checkout from './pages/Checkout';
+import RequireAuth from './components/RequireAuth';
 
 
 export default function App() {
@@ -25,6 +24,7 @@ export default function App() {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/carrito" element={<Carrito />} />
+        <Route path="/checkout" element={<RequireAuth><Checkout /></RequireAuth>} /> 
         <Route path="/compra-exitosa" element={<CompraExitosa />} />
         <Route path="/compra-error" element={<CompraError />} />
         
