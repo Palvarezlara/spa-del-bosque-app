@@ -9,9 +9,11 @@ export default function HeroSection() {
           <div className="col-12 col-md-6">
             <h1 className="display-6 mb-2">Relajo y desconexión</h1>
             <p className="lead mb-3">
+              <br />
               Descubra los espacios ideales para el descanso y la calma en Spa del Bosque.
               Contamos con el único circuito de aguas de la V Región, acondicionadas naturalmente a tres temperaturas.
               Un mágico lugar donde el silencio, la paz, las vertientes y la naturaleza son protagonistas.
+              <br />
               <br />
               Explore nuestros servicios, masajes, tratamientos corporales y terapias de relajación que estimularán la
               concentración, salud y bienestar integralmente.
