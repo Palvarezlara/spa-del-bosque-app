@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE || "https://demo.mockable.io/api/v1/spadelbosque";
+const BASE_URL = import.meta.env.VITE_API_BASE || "https://demo6694663.mockable.io/api/v1/spadelbosque";
 
 async function http(url, options) {
   const res = await fetch(url, options);

@@ -11,6 +11,7 @@ import CompraExitosa from './pages/CompraExitosa';
 import CompraError from './pages/CompraError';
 import Checkout from './pages/Checkout';
 import RequireAuth from './components/RequireAuth';
+import Registro from './pages/Registro';
 
 
 export default function App() {
@@ -19,15 +20,16 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/servicios" element={<Servicios />} />
+        <Route path="/blogs" element={<Blogs />} />
         <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/contacto" element={<Contacto />} />
-        <Route path="/blogs" element={<Blogs />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/checkout" element={<RequireAuth><Checkout /></RequireAuth>} /> 
         <Route path="/compra-exitosa" element={<CompraExitosa />} />
         <Route path="/compra-error" element={<CompraError />} />
-        
+        <Route path="*" element={<div className="container py-4">404 — Ruta no encontrada</div>} />
       </Routes>
     </AppLayout>
   )
