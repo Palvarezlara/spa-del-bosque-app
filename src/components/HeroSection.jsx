@@ -22,9 +22,9 @@ export default function HeroSection() {
           </div>
           <div className="col-12 col-md-6">
             <img 
-            src="src\assets\categorias\sala-masajes.png" 
+            src="src/assets/front.png" 
             className="img-fluid rounded shadow-sm"
-            alt="Sala de terapias del SPA" />
+            alt="Entrada SPA" />
 
           </div>
         </div>
