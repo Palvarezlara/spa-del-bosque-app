@@ -11,6 +11,7 @@ export default function AppLayout({ children }) {
         <main className="container py-4 flex-grow-1">{children}</main>
         
       <Footer />
+      <div id="toastArea" className="toast-container position-fixed bottom-0 end-0 p-3" />
       </div>
     </CartProvider>
     

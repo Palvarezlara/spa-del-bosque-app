@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { showToast } from '../utils/toast';
 
 export default function CardServicio({ servicio, ...rest}) {
   const s = servicio ?? rest;
@@ -22,6 +23,7 @@ export default function CardServicio({ servicio, ...rest}) {
 
   const handleAdd = () => {
       addItem({ sku, nombre, precio, img: imgSrc, categoria, duracionMin, qty: 1 });
+      showToast(`Agregado: ${servicio.nombre}`, 'success');
   };
 
   return (
@@ -36,7 +38,7 @@ export default function CardServicio({ servicio, ...rest}) {
           <h3 className="h6">{nombre} {duracionMin ? <i className="bi bi-clock"></i> : null}</h3>
           <p className="text-muted mb-2">{precioCLP}</p>
           <div className="d-grid gap-2 mt-auto">
-            <Link to={`/producto/${sku}`} className="btn btn-outline-success btn-sm">Ver detalle</Link>
+            <Link to={`/servicio/${sku}`} className="btn btn-outline-success btn-sm">Ver detalle</Link>
             <button type="button" className="btn btn-outline-success btn-sm">Agendar</button>
             <button type="button" className="btn btn-success btn-sm" onClick={handleAdd}>Agregar</button>
           </div>

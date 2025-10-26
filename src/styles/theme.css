@@ -148,6 +148,22 @@ main {
   --bs-btn-disabled-bg: transparent;
   --bs-btn-disabled-border-color: var(--brand);
 }
+
+/* Chip de categoría  */
+.bg-brand-soft {
+  background: var(--mint-1) !important;
+}
+.text-brand { color: var(--brand) !important; }
+
+/* Card hover  */
+.hover-card {
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.hover-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.08);
+}
+
 #cartCount { display: inline-block !important; }
 
 /* Ajuste fino del badge del carrito */

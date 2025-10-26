@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import AppLayout from './layout/AppLayout';
 import Home from './pages/Home';
 import Servicios from './pages/Servicios';
@@ -13,7 +13,9 @@ import CompraExitosa from './pages/CompraExitosa';
 import CompraError from './pages/CompraError';
 import Checkout from './pages/Checkout';
 import RequireAuth from './components/RequireAuth';
+import ServicioDetalle from './pages/ServicioDetalle';
 
+//falta proteger las rutas 
 
 
 export default function App() {
@@ -22,6 +24,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/servicios" element={<Servicios />} />
+        <Route path="/servicio/:sku" element={<ServicioDetalle />} />
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/contacto" element={<Contacto />} />
