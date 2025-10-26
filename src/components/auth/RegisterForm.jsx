@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
-export default function RegisterForm({ onSubmit }) {
-  const [form, setForm] = useState({
-    nombre: '', apellido: '', email: '',
-    password: '', password2: '',
-    telefono: '', region: '', comuna: '',
-  });
+export default function RegisterForm() {
+  const { register } = useAuth();
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+
   const [err, setErr] = useState('');
 
   const onChange = (e) =>
@@ -13,20 +14,24 @@ export default function RegisterForm({ onSubmit }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErr('');
-    if (!form.nombre || !form.apellido || !form.email || !form.password || !form.password2) {
-      setErr('Completa todos los campos obligatorios.');
+    const res = await register({ nombre, apellido, email, password, telefono, region, comuna });
+
+    if (!res.ok) {
+      // muestra error (toast/alert)
+      setErr(res.error || "No se pudo registrar.");
       return;
     }
-    if (form.password !== form.password2) {
-      setErr('Las contraseñas no coinciden.');
-      return;
-    }
-    const res = await onSubmit(form);
-    if (!res?.ok) {
-      setErr(res?.error || 'No se pudo registrar.');
-    }
+
+        // guardar email para pre-fill en login
+    sessionStorage.setItem("prefillEmail", email);
+
+    
+    const returnTo = params.get("returnTo") || "/perfil";
+
+    // redirigir al login con mensaje de éxito
+    navigate(`/login?registered=1&returnTo=${encodeURIComponent(returnTo)}`);
   };
+ 
 
   return (
     <form onSubmit={handleSubmit} noValidate>

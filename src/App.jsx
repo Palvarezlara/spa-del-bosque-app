@@ -6,12 +6,14 @@ import Nosotros from './pages/Nosotros';
 import Contacto from './pages/Contacto';
 import Blogs from './pages/Blogs';
 import Login from './pages/Login';
+import Registro from './pages/Registro';
 import Carrito from './pages/Carrito';
+import Perfil from './pages/Perfil';
 import CompraExitosa from './pages/CompraExitosa';
 import CompraError from './pages/CompraError';
 import Checkout from './pages/Checkout';
 import RequireAuth from './components/RequireAuth';
-import Registro from './pages/Registro';
+
 
 
 export default function App() {
@@ -26,6 +28,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/carrito" element={<Carrito />} />
+        <Route path="/perfil" element={<RequireAuth><Perfil /></RequireAuth>} />
         <Route path="/checkout" element={<RequireAuth><Checkout /></RequireAuth>} /> 
         <Route path="/compra-exitosa" element={<CompraExitosa />} />
         <Route path="/compra-error" element={<CompraError />} />

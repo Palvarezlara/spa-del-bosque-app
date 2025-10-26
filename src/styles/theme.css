@@ -64,6 +64,10 @@ main {
   background: var(--mint-1) !important;
 }
 
+.bg-mint-light {
+  background: var(--mint-1);
+}
+
 .border-soft {
   border-color: var(--gray-4) !important;
 }
