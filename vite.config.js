@@ -12,4 +12,14 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    globals: true,              // para usar expect(), describe(), etc.
+    environment: 'jsdom',       // simula el DOM en Node
+    setupFiles: './tests/setup.js', // importa jest-dom automáticamente
+    coverage: {
+      provider: 'v8',           // usa el motor de cobertura de Chrome
+      reporter: ['text', 'html'], // genera reporte en consola y en HTML
+    },
+  },
+
 })
