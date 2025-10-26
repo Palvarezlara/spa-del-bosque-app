@@ -73,6 +73,9 @@ export function AuthProvider({ children }) {
 
   // LOGIN: acepta contraseña en texto, compara contra passHash si existe o contra pass plano si fue registrado local
   const login = async (email, password, remember = false) => {
+    if (!email || !password) {
+      return { ok: false, error: 'Debes ingresar correo y contraseña' };
+    }
     const users = JSON.parse(localStorage.getItem(LS_USERS) || '[]');
     const found = users.find(u => u.email?.toLowerCase() === String(email).toLowerCase());
     if (!found) return { ok: false, error: 'Correo o contraseña incorrectos' };
