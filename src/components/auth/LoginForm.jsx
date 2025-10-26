@@ -1,28 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+
 
 export default function LoginForm({ onSubmit, defaultEmail = '' }) {
-  const [email, setEmail] = useState(defaultEmail);
-  const [pass, setPass] = useState('');
-  const [remember, setRemember] = useState(true);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState(""); 
+  const [remember, setRemember] = useState(false);
   const [show, setShow] = useState(false);
-  const [err, setErr] = useState('');
+  const [info, setInfo] = useState("");
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem("prefillEmail");
+    if (saved) setEmail(saved);
+    if (params.get("registered") === "1") 
+      setInfo("Registro exitoso. Inicia sesión para continuar.");
+  }, [params]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErr('');
-    if (!email || !pass) {
-      setErr('Completa correo y contraseña');
+    setErr("");
+
+    const res = await login(email, pass, remember);  
+    if (!res.ok) {
+      setErr("Correo o contraseña incorrectos");
       return;
     }
-    const res = await onSubmit({ email, pass, remember });
-    if (!res?.ok) {
-      setErr(res?.error || 'Credenciales inválidas');
-      setPass('');
-    }
+
+    const returnTo = params.get("returnTo") || "/";
+    sessionStorage.removeItem("prefillEmail");
+    navigate(returnTo, { replace: true });
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form onSubmit={handleSubmit}  noValidate>
+      {info && <div className="alert alert-success py-2 small">{info}</div>}
       <div className="mb-3">
         <label className="form-label">Correo</label>
         <input

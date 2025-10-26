@@ -1,11 +1,16 @@
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useLocation , useNavigate } from "react-router-dom";
 import { useCart } from '../context/CartContext';
+import {useAuth} from '../context/AuthContext';
 import logo from '../assets/logo.png';
 
 export default function Navigation() {
-  const { count } = useCart();           //items en el carrito
-  //const navigate = useNavigate();       
+  const { count } = useCart();     
+  const {isLoggedIn, user, logout} = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  const returnTo = encodeURIComponent(location.pathname + location.search);
+          
   // Más adelante esto vendrá de un AuthContext (o localStorage).
   const usuario = null; // O un objeto { nombre: "Ana" }
 
@@ -78,9 +83,8 @@ export default function Navigation() {
                 "btn btn-outline-success position-relative" + (isActive ? " active" : "")
               }
             >
-              {/* Ícono (requiere bootstrap-icons) */}
+              
               <i className="bi bi-cart3 me-1" aria-hidden="true"></i>
-              {/* Volver aqui si quiero que sea vea el cero */}
               {count > 0 && (
                 <span
                   id="cartCount"
@@ -93,15 +97,39 @@ export default function Navigation() {
             </NavLink>
 
             {/* Botón Ingresar (si no hay sesión) o saludo + cerrar (si hay) */}
-            {!usuario ? (
-              <NavLink to="/login" className="btn btn-success">
+            {!isLoggedIn ? (
+              <NavLink to={`/login?returnTo=${returnTo}`} className="btn btn-success">
                 Ingresar
               </NavLink>
             ) : (
-              <>
-                <span className="navbar-text ms-2">Hola, {usuario.nombre}</span>
-                <button className="btn btn-outline-light">Cerrar sesión</button>
-              </>
+              <div className="dropdown">
+                <button
+                  className="btn btn-outline-success dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Hola, {user?.nombre?.split(" ")[0] || "Usuario"}
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <NavLink className="dropdown-item" to="/perfil">
+                      Mi cuenta
+                    </NavLink>
+                  </li>
+                  <li><hr className="dropdown-divider" /></li>
+                  <li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => {
+                        logout();
+                        navigate("/", { replace: true });
+                      }}
+                    >
+                      Cerrar sesión
+                    </button>
+                  </li>
+                </ul>
+              </div>
             )}
           </div>
         </div>

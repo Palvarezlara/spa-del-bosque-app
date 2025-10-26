@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { getUsuarios } from '../data/api'; // cuando conectemos realmente el backend reemplazamos aqui
 
 const AuthContext = createContext(null);
 
 // Claves de almacenamiento 
 const LS_USERS = 'spa_users';
 const LS_SESSION = 'spa_session';
-const AUTH_KEY = 'spa-bosque-auth'; 
+const AUTH_KEY = 'spa-bosque-auth';
 const REMEMBER_KEY = LS_SESSION + '_remember';
 
 // endpoint mockable.io con usuarios semilla
@@ -33,7 +34,6 @@ function isValidPhoneCL(str) {
 }
 
 export function AuthProvider({ children }) {
-  // Sesión (objeto usuario logueado mínimo: id, nombre, email, rol)
   const [user, setUser] = useState(() => {
     try { return JSON.parse(localStorage.getItem(LS_SESSION)) || null; }
     catch { return null; }
@@ -44,7 +44,7 @@ export function AuthProvider({ children }) {
     try {
       const existing = JSON.parse(localStorage.getItem(LS_USERS) || '[]');
       if (!existing.length) {
-        
+
         fetch(USERS_URL)
           .then(r => r.json())
           .then(data => {
@@ -57,13 +57,13 @@ export function AuthProvider({ children }) {
               telefono: u.telefono,
               region: u.region,
               comuna: u.comuna,
-              passHash: u.passwordHash, // importante
+              passHash: u.passwordHash,
               rol: 'cliente',
             }));
             localStorage.setItem(LS_USERS, JSON.stringify(mapped));
           })
           .catch(() => {
-            // sin seed remota; se queda vacío y se podrá registrar
+
           });
       }
     } catch { /* noop */ }
@@ -94,6 +94,10 @@ export function AuthProvider({ children }) {
       id: found.id ?? Date.now(),
       email: found.email,
       nombre: found.nombre ?? 'Usuario',
+      apellido: found.apellido || '',
+      telefono: found.telefono || '',
+      region: found.region || '',
+      comuna: found.comuna || '',
       rol: found.rol ?? 'cliente',
       ts: Date.now(),
     };
@@ -106,7 +110,7 @@ export function AuthProvider({ children }) {
     return { ok: true, user: session };
   };
 
-  // REGISTRO: valida dominio, teléfonos y duplica a LS_USERS; luego inicia sesión
+  // REGISTRO
   const register = async ({
     nombre,
     apellido,
@@ -130,10 +134,11 @@ export function AuthProvider({ children }) {
 
     const newUser = {
       id: 'U' + Date.now(),
-      nombre: `${nombre} ${apellido}`.trim(),
+      nombre: nombre,
+      apellido: apellido,
       email: email.trim(),
-      pass: password,        // DEMO: plano (cuando conectes backend, usa hash + backend)
-      passHash: null,        // para distinguir de los semilla
+      pass: password,
+      passHash: null,
       telefono: normalizePhone(telefono),
       region,
       comuna,
@@ -143,9 +148,7 @@ export function AuthProvider({ children }) {
     users.push(newUser);
     localStorage.setItem(LS_USERS, JSON.stringify(users));
 
-    // Autologin
-    const res = await login(newUser.email, password, true);
-    return res.ok ? { ok: true, user: res.user } : res;
+    return { ok: true, user: newUser, needsLogin: true };
   };
 
   const logout = () => {
