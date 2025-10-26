@@ -6,7 +6,7 @@ import {SERVICIOS as LOCAL_SERV} from "../data/data";
 import ServiceBreadcrumb from "../components/Breadcrumb";
 import ServiceMetaBar from "../components/ServiceMetaBar";
 import ServiceSummaryCard from "../components/ServiceSummaryCard";
-import RelatedServices from "../components/relacionados";
+import RelatedServices from "../components/RelatedServices";
 import { showToast } from "../utils/toast";
 
 export default function ServicioDetalle() {

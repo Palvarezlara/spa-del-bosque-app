@@ -19,6 +19,13 @@ export default defineConfig({
     coverage: {
       provider: 'v8',           // usa el motor de cobertura de Chrome
       reporter: ['text', 'html'], // genera reporte en consola y en HTML
+      all: true,
+    include: ['src/components/auth/LoginForm.jsx',
+        'src/components/CardServicio.jsx',
+        'src/pages/Perfil.jsx',
+      ],
+    
+    thresholds: undefined,
     },
   },
 

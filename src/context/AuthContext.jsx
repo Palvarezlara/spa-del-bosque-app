@@ -101,7 +101,7 @@ export function AuthProvider({ children }) {
       telefono: found.telefono || '',
       region: found.region || '',
       comuna: found.comuna || '',
-      rol: found.rol ?? 'cliente',
+      rol: found.rol ?? (found.email.includes('profesor') ? 'admin' : 'cliente'), //<--- Para panel de admin a futuro
       ts: Date.now(),
     };
 

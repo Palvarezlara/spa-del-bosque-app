@@ -79,4 +79,40 @@ describe('LoginForm', () => {
     expect(mockLogin).toHaveBeenCalledWith('pamela@example.com', 'Secreta123', false)
     expect(mockNavigate).toHaveBeenCalledWith('/perfil', { replace: true })
   })
+
+    it('muestra/oculta contraseña (cubre rama de show)', async () => {
+    renderWithRouter(<LoginForm />)
+    const toggleBtn = screen.getByRole('button', { name: /mostrar u ocultar contraseña/i })
+    const group = toggleBtn.closest('.input-group')
+    const input = group.querySelector('input')
+
+    expect(input).toHaveAttribute('type', 'password')
+    await userEvent.click(toggleBtn)
+    expect(input).toHaveAttribute('type', 'text')
+  })
+
+  it('envía remember=true cuando se marca Recordarme', async () => {
+  mockLogin.mockResolvedValueOnce({ ok: false }) // no navega, solo verificamos args
+  renderWithRouter(<LoginForm />)
+
+  const email = screen.getByPlaceholderText(/nombre@correo\.com/i)
+  await userEvent.type(email, 'p@duoc.cl')
+
+  const toggleBtn = screen.getByRole('button', { name: /mostrar u ocultar contraseña/i })
+  const inputPass = toggleBtn.closest('.input-group').querySelector('input')
+  await userEvent.type(inputPass, '1234')
+
+  const remember = screen.getByRole('checkbox', { name: /recordarme/i })
+  await userEvent.click(remember)
+
+  await userEvent.click(screen.getByRole('button', { name: /ingresar/i }))
+  expect(mockLogin).toHaveBeenCalledWith('p@duoc.cl', '1234', true)
+})
+
+  it('muestra banner de registro exitoso con ?registered=1', async () => {
+    renderWithRouter(<LoginForm />, { initialEntries: ['/login?registered=1'] })
+    expect(screen.getByText(/registro exitoso/i)).toBeInTheDocument()
+  })
+
+
 })

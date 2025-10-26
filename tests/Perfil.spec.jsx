@@ -67,4 +67,19 @@ describe('Perfil', () => {
     expect(authState.logout).toHaveBeenCalled()
     expect(mockNavigate).toHaveBeenCalledWith('/')
   })
+
+  it('muestra tabla de reservas con badges de estado', () => {
+  renderWithRouter(<Perfil />)
+  const filas = screen.getAllByRole('row') // incluye header
+  expect(filas.length).toBeGreaterThan(2)   // hay 2 reservas mock
+  expect(screen.getByText(/completada/i)).toBeInTheDocument()
+  expect(screen.getByText(/pendiente/i)).toBeInTheDocument()
+})
+
+it('el botón "Ver detalle" aparece deshabilitado', () => {
+  renderWithRouter(<Perfil />)
+  const btns = screen.getAllByRole('button', { name: /ver detalle/i })
+  btns.forEach(b => expect(b).toBeDisabled())
+})
+
 })
