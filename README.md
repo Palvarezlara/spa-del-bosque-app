@@ -32,7 +32,8 @@ El objetivo principal fue **migrar el sitio HTML estático a una aplicación Rea
 
 ## 🏗️ Estructura principal del proyecto
 
-📦 spa-del-bosque/
+```
+spa-del-bosque/
 ├── public/
 │   └── Productos/               # Imágenes de servicios y tratamientos
 │       ├── relajacion.png
@@ -42,20 +43,16 @@ El objetivo principal fue **migrar el sitio HTML estático a una aplicación Rea
 │
 ├── src/
 │   ├── assets/                  # Recursos gráficos estáticos
-│   │   ├── terapeutas/
 │   │   ├── blog/
 │   │   ├── categorias/
-│   │   ├── front.png
-│   │   ├── logo.png
-│   │   └── default-avatar.png
+│   │   └── terapeutas/
 │   │
 │   ├── components/              # Componentes reutilizables de la aplicación
 │   │   ├── about/               # Sección "Nosotros"
 │   │   ├── auth/                # Login / Registro / Guards
 │   │   ├── blog/                # Blog y detalle de publicaciones
 │   │   ├── contact/             # Formulario de contacto
-│   │   ├── layout/              # Navegación, Footer, Layout principal
-│   │   └── services/            # Cards, categorías, detalles, relacionados
+│   │   └── layout/              # Navegación, Footer, Layout principal
 │   │
 │   ├── context/                 # Contextos globales de React
 │   │   ├── AuthContext.jsx
@@ -92,7 +89,7 @@ El objetivo principal fue **migrar el sitio HTML estático a una aplicación Rea
 │   ├── styles/
 │   │   └── theme.css            # Estilos base y variables del proyecto
 │   │
-│   ├── utils/                   # Utilidades globales
+│   ├── utils/
 │   │   ├── formatters.js        # CLP formatter y categorías
 │   │   └── toast.js             # Toast global para mensajes de usuario
 │   │
@@ -103,13 +100,12 @@ El objetivo principal fue **migrar el sitio HTML estático a una aplicación Rea
 │
 ├── .env                         # Variables de entorno (mockable, etc.)
 ├── index.html                   # HTML base de Vite
-├── vite.config.js               # Configuración Vite
+├── vite.config.js                # Configuración Vite
 ├── package.json                 # Dependencias y scripts
 ├── netlify.toml                 # Configuración para despliegue
 └── README.md                    # Documentación del proyecto
 
-
-
+```
 ---
 
 ## 🧠 Principales funcionalidades
