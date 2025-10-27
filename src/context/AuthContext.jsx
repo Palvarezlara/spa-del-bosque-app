@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { getUsuarios } from '../data/api'; // cuando conectemos realmente el backend reemplazamos aqui
 
+
 const AuthContext = createContext(null);
 
 // Claves de almacenamiento 

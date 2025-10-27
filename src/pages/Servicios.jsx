@@ -28,7 +28,7 @@ export default function Servicios() {
   useEffect(() => {
     getServicios()
       .then(data => setServicios(data.servicios ?? []))
-      .catch(() => setServicios(LOCAL_SERV ?? [])) // Si no conecta con mockable usa datos locales
+      .catch(() => setServicios(LOCAL_SERV ?? [])) 
       .finally(() => setLoading(false));
   }, []);
 

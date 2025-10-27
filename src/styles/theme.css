@@ -184,3 +184,7 @@ main {
 
 /* botón de slot seleccionado */
 .slot.active { background: var(--bs-success); color: #fff; border-color: var(--bs-success); }
+.article-content {
+  line-height: 1.8;
+  font-size: 1.075rem;
+}

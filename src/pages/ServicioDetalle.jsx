@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getServicios } from "../data/api";
 import { useCart } from "../context/CartContext";
-import {SERVICIOS as LOCAL_SERV} from "../data/data";
 import ServiceBreadcrumb from "../components/Breadcrumb";
 import ServiceMetaBar from "../components/ServiceMetaBar";
 import ServiceSummaryCard from "../components/ServiceSummaryCard";
