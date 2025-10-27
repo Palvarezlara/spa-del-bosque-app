@@ -5,6 +5,7 @@ import Servicios from './pages/Servicios';
 import Nosotros from './pages/Nosotros';
 import Contacto from './pages/Contacto';
 import Blogs from './pages/Blogs';
+import BlogDetalle from './pages/BlogDetalle';
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Carrito from './pages/Carrito';
@@ -14,6 +15,7 @@ import CompraError from './pages/CompraError';
 import Checkout from './pages/Checkout';
 import RequireAuth from './components/RequireAuth';
 import ServicioDetalle from './pages/ServicioDetalle';
+
 
 //falta proteger las rutas 
 
@@ -26,6 +28,7 @@ export default function App() {
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/servicio/:sku" element={<ServicioDetalle />} />
         <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blog/:id" element={<BlogDetalle />} />
         <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/login" element={<Login />} />

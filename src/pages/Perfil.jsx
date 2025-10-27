@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import defaultAvatar from "../assets/default-avatar.png";
+import { showToast } from "../utils/toast";
 
 export default function Perfil() {
     const { user, isLoggedIn, logout } = useAuth();
