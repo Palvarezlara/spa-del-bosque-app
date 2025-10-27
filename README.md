@@ -1,18 +1,190 @@
-# React + Vite
+# 🌿 SPA del Bosque — Aplicación React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Proyecto académico desarrollado para la **Evaluación Parcial 2** de la asignatura **Desarrollo Fullstack 2 (DSY1104)**.  
+El objetivo principal fue **migrar el sitio HTML estático a una aplicación React** con componentes reutilizables, validaciones, persistencia simulada y estructura modular.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧩 Objetivos de la migración
 
-## React Compiler
+✅ Migrar páginas estáticas HTML a React (componentes funcionales).  
+✅ Incorporar Bootstrap 5 para diseño responsivo.  
+✅ Implementar archivo de datos JS como fuente simulada.  
+✅ Aplicar operaciones CRUD sobre datos mockeados.  
+✅ Añadir validaciones y feedback visual al usuario.  
+✅ Integrar toasts globales e interactividad con Context API.  
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+---
 
-Note: This will impact Vite dev & build performances.
+## ⚙️ Tecnologías utilizadas
 
-## Expanding the ESLint configuration
+| Tipo | Herramienta |
+|------|--------------|
+| **Framework** | React 18 (Vite) |
+| **Estilos** | Bootstrap 5.3 + Bootstrap Icons |
+| **Estado global** | React Context (AuthContext, CartContext) |
+| **Persistencia simulada** | LocalStorage + data.js |
+| **Notificaciones** | Custom Toast global |
+| **Pruebas unitarias** | Jasmine + Karma (configurado) |
+| **Librerías adicionales** | React Router DOM |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🏗️ Estructura principal del proyecto
+
+📦 spa-del-bosque/
+├── public/
+│   └── Productos/               # Imágenes de servicios y tratamientos
+│       ├── relajacion.png
+│       ├── descontracturante.png
+│       ├── sauna.png
+│       └── ...
+│
+├── src/
+│   ├── assets/                  # Recursos gráficos estáticos
+│   │   ├── terapeutas/
+│   │   ├── blog/
+│   │   ├── categorias/
+│   │   ├── front.png
+│   │   ├── logo.png
+│   │   └── default-avatar.png
+│   │
+│   ├── components/              # Componentes reutilizables de la aplicación
+│   │   ├── about/               # Sección "Nosotros"
+│   │   ├── auth/                # Login / Registro / Guards
+│   │   ├── blog/                # Blog y detalle de publicaciones
+│   │   ├── contact/             # Formulario de contacto
+│   │   ├── layout/              # Navegación, Footer, Layout principal
+│   │   └── services/            # Cards, categorías, detalles, relacionados
+│   │
+│   ├── context/                 # Contextos globales de React
+│   │   ├── AuthContext.jsx
+│   │   └── CartContext.jsx
+│   │
+│   ├── data/                    # Datos simulados y CRUD mock
+│   │   ├── api.js               # Fetch desde mockable.io o fallback local
+│   │   ├── blogs.js             # Artículos del blog
+│   │   ├── crudServicios.js     # Operaciones CRUD sobre los servicios mock
+│   │   ├── data.js              # Base de datos simulada de servicios
+│   │   ├── mockable.json        # Endpoints mockables
+│   │   └── store.js             # Persistencia auxiliar
+│   │
+│   ├── layout/
+│   │   └── AppLayout.jsx        # Estructura general (header + footer + toast)
+│   │
+│   ├── pages/                   # Páginas principales del sitio
+│   │   ├── Home.jsx
+│   │   ├── Servicios.jsx
+│   │   ├── ServicioDetalle.jsx
+│   │   ├── Nosotros.jsx
+│   │   ├── Contacto.jsx
+│   │   ├── Perfil.jsx
+│   │   ├── Login.jsx
+│   │   ├── Registro.jsx
+│   │   ├── Blogs.jsx
+│   │   ├── BlogDetalle.jsx
+│   │   ├── Carrito.jsx
+│   │   ├── Checkout.jsx
+│   │   ├── CompraExitosa.jsx
+│   │   ├── CompraError.jsx
+│   │   └── NotFound.jsx
+│   │
+│   ├── styles/
+│   │   └── theme.css            # Estilos base y variables del proyecto
+│   │
+│   ├── utils/                   # Utilidades globales
+│   │   ├── formatters.js        # CLP formatter y categorías
+│   │   └── toast.js             # Toast global para mensajes de usuario
+│   │
+│   ├── tests/                   # Pruebas unitarias (Jasmine + Karma)
+│   │
+│   ├── App.jsx                  # Definición de rutas y composición general
+│   └── main.jsx                 # Punto de entrada principal
+│
+├── .env                         # Variables de entorno (mockable, etc.)
+├── index.html                   # HTML base de Vite
+├── vite.config.js               # Configuración Vite
+├── package.json                 # Dependencias y scripts
+├── netlify.toml                 # Configuración para despliegue
+└── README.md                    # Documentación del proyecto
+
+
+
+---
+
+## 🧠 Principales funcionalidades
+
+### 🏠 Home
+Presenta los servicios destacados y accesos a categorías principales.
+
+### 💆 Servicios
+Listado general de servicios agrupados por categoría, con botones **Ver detalle** y **Agregar al carrito**.
+
+### 🧾 ServicioDetalle
+Muestra información detallada del servicio seleccionado.  
+Incluye imagen, precio, duración y **servicios relacionados**.  
+Permite agregar al carrito con feedback mediante **toast**.
+
+### 👤 Perfil
+Muestra los datos del usuario logueado (nombre, correo, teléfono, región, comuna)  
++ opción de cargar una foto local (previsualización).  
+
+### 📞 Contacto
+Formulario validado en React:  
+- Nombre y correo con dominios permitidos (`@duoc.cl`, `@profesor.duoc.cl`, `@gmail.com`)  
+- Contador de caracteres del mensaje (máx. 500)  
+- Checkbox de aceptación de términos  
+- Persistencia de los mensajes enviados en `localStorage`  
+
+### 👥 Nosotros
+Sección informativa con estructura modular:
+- Hero con imagen y texto introductorio  
+- Misión y Visión  
+- Valores corporativos  
+- Equipo de terapeutas  
+- Línea de tiempo con hitos de la historia  
+
+---
+
+## 💾 Persistencia de datos (mock)
+
+El archivo `src/data/data.js` actúa como **fuente de datos simulada**, representando una “base de datos” local con servicios del SPA.  
+Además, se simulan operaciones CRUD en memoria o `localStorage`.
+
+---
+
+## 🧪 Pruebas unitarias
+
+Se configuró el entorno de pruebas con **Jasmine + Karma**, cubriendo:
+- Carga de componentes principales  
+- Validación de formularios  
+- Renderizado condicional según estado del usuario  
+
+Los reportes de cobertura se exportan en `/coverage`.
+
+---
+
+## 🚀 Ejecución del proyecto
+
+```bash
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm run dev
+
+# Ejecutar pruebas unitarias
+npm test
+
+# Compilar para producción
+npm run build
+```
+---
+Autoría
+
+Pamela Álvarez Lara
+Carrera: Ingeniería en Informática — Duoc UC
+Asignatura: DSY1104 — Desarrollo Fullstack II
+Docente: Prof. Javier Peña
+
+Este proyecto representa la migración total del SPA del Bosque desde un sitio estático HTML a una aplicación modular React con validaciones, persistencia simulada y diseño responsivo.
