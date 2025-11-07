@@ -20,19 +20,12 @@ export default function ServicioDetalle() {
   useEffect(() => {
     let mounted = true;
     getServicios()
-      .then(data => {
-        if (!mounted) return;
-        const list = data?.servicios ?? [];
-        setServicios(list);
-        setS(list.find(x => String(x.sku) === String(sku)) || null);
-      })
-      .catch(() => {
-        if (!mounted) return;
-        const list = LOCAL_SERV ?? [];
-        setServicios(list);
-        setS(list.find(x => String(x.sku) === String(sku)) || null);
-      })
-      .finally(() => setLoading(false));
+  .then(({ servicios: list }) => {
+    if (!mounted) return;
+    setServicios(list);
+    setS(list.find(x => String(x.sku) === String(sku)) || null);
+  })
+  .finally(() => setLoading(false));
 
     return () => { mounted = false };
   }, [sku]);

@@ -7,6 +7,18 @@ export default function RegisterForm() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
+  const [form, setForm] = useState({
+  nombre: "",
+  apellido: "",
+  email: "",
+  password: "",
+  password2: "",
+  telefono: "",
+  region: "",
+  comuna: ""
+});
+
+
   const [err, setErr] = useState('');
 
   const onChange = (e) =>
@@ -14,6 +26,7 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { nombre, apellido, email, password, telefono, region, comuna } = form;
     const res = await register({ nombre, apellido, email, password, telefono, region, comuna });
 
     if (!res.ok) {
