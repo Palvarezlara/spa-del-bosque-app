@@ -1,7 +1,7 @@
 
-import respiracionImg from '../assets/blog/respiracion.png';
-import piedrasImg     from '../assets/blog/piedras.png';
-import circuitoImg    from '../assets/blog/circuito.png'; 
+import respiracionImg from '../assets/blog/respiracion.webp';
+import piedrasImg     from '../assets/blog/piedras.webp';
+import circuitoImg    from '../assets/blog/circuito.webp'; 
 
 export const BLOGS_DB = [
   {

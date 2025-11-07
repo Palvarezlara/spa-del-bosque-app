@@ -1,7 +1,7 @@
 import { NavLink, Link, useLocation , useNavigate } from "react-router-dom";
 import { useCart } from '../context/CartContext';
 import {useAuth} from '../context/AuthContext';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.webp';
 
 export default function Navigation() {
   const { count } = useCart();     

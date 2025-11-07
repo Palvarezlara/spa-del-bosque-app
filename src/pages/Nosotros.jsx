@@ -3,8 +3,8 @@ import MissionVision from "../components/about/MissionVision";
 import ValuesGrid from "../components/about/ValuesGrid";
 import TeamGrid from "../components/about/TeamGrid";
 import Timeline from "../components/about/Timeline";
-import viviImg from '.././assets/terapeutas/vivianaSchipp.jpg';
-import aliciaImg from '.././assets/terapeutas/AliciaMeza.jpg';
+import viviImg from '.././assets/terapeutas/vivianaSchipp.webp';
+import aliciaImg from '.././assets/terapeutas/AliciaMeza.webp';
 
 export default function Nosotros() {
   const team = [

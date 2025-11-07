@@ -1,4 +1,4 @@
-import heroImg from '../../assets/front.png';
+import heroImg from '../../assets/front.webp';
 
 export default function AboutHero({
   title = "Sobre nosotros",

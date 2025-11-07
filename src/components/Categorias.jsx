@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import masajesImg from '../assets/categorias/masajes.png';
-import corporalesImg from '../assets/categorias/corporales.png';
-import circuitoSaunaImg from '../assets/categorias/circuito-sauna.png';
-import programaIndividualesImg from '../assets/categorias/programas-individuales.png';
-import programaParejasImg from '../assets/categorias/programas-en-pareja.png';
-import escapadaAmigasImg from '../assets/categorias/escapada-amigas.png';
+import masajesImg from '../assets/categorias/masajes.webp';
+import corporalesImg from '../assets/categorias/corporales.webp';
+import circuitoSaunaImg from '../assets/categorias/circuito-sauna.webp';
+import programaIndividualesImg from '../assets/categorias/programas-individuales.webp';
+import programaParejasImg from '../assets/categorias/programas-en-pareja.webp';
+import escapadaAmigasImg from '../assets/categorias/escapada-amigas.webp';
 
 
 

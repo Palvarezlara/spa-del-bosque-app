@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import heroImg from '../assets/front.png';
+import heroImg from '../assets/front.webp';
 
 export default function HeroSection() {
   return (
