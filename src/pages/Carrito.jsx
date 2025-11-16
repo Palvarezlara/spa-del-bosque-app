@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useCart } from '../context/CartContext'; 
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const CLP = new Intl.NumberFormat('es-CL', {
   style: 'currency',
@@ -42,6 +43,7 @@ function showToast(msg, variant = 'success') {
 
 export default function Carrito() {
   const { items, inc, dec, removeBySku, clear, total } = useCart();
+  const { user } = useAuth();
 
   useEffect(() => {
     document.title = 'SPA del Bosque — Carrito';
@@ -70,12 +72,24 @@ export default function Carrito() {
 
   return (
     <div className="container py-4">
-      <h1 className="h3 mb-4">Tu Carrito</h1>
-
+      <div className="d-flex justify-content-between align-items-baseline mb-2 flex-wrap gap-2">
+        <h1 className="h3 mb-0">
+          Tu Carrito
+          {user && (
+            <span className="fs-6 text-muted ms-2">
+              — Hola, {user.nombre}
+            </span>
+          )}
+        </h1>
+      </div>
       {/* Estado vacío */}
       {isEmpty && (
         <div className="alert alert-info">
-          Tu carrito está vacío. <Link to="/servicios" className="alert-link">Servicios</Link> para agregar terapias.
+          Tu carrito está vacío. Visita la sección{' '}
+          <Link to="/servicios" className="alert-link">
+            Servicios
+          </Link>{' '}
+          para agregar terapias.
         </div>
       )}
 
@@ -161,9 +175,21 @@ export default function Carrito() {
           Vaciar carrito
         </button>
        
-        <Link className={`btn btn-success ${isEmpty ? 'disabled' : ''}`} to={isEmpty ? '#' : '/checkout'}>
-          Proceder a Pagar
-        </Link>
+        {user ? (
+          <Link
+            className={`btn btn-success ${isEmpty ? 'disabled' : ''}`}
+            to={isEmpty ? '#' : '/checkout'}
+          >
+            Proceder a pagar / reservar
+          </Link>
+        ) : (
+          <Link
+            className={`btn btn-success ${isEmpty ? 'disabled' : ''}`}
+            to={isEmpty ? '#' : '/login'}
+          >
+            Iniciar sesión para reservar
+          </Link>
+        )}
       </div>
     </div>
   );

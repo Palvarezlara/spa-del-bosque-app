@@ -22,7 +22,7 @@ import ServicioDetalle from './pages/ServicioDetalle';
 import AdminServicios from "./pages/admin/AdminServicios";
 import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import AdminBlogs from "./pages/admin/AdminBlogs";
-import AdminReporte from "./pages/admin/AdminReporte";
+import AdminReporte from './pages/admin/AdminReporte';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 
 export default function App() {

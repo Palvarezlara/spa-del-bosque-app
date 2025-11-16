@@ -11,7 +11,24 @@ export default function Checkout() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
+    // Formulario de datos de cliente / reserva
+    const [form, setForm] = useState({
+        telefono: user?.telefono || '',
+        fechaPreferida: '',
+        horarioPreferido: '',
+        numeroPersonas: 1,
+        comentarios: '',
+    });
+
     const isEmpty = !items.length === 0;
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({
+            ...prev,
+            [name]: name === 'numeroPersonas' ? Number(value) : value,
+        }));
+    };
 
     const handlePay = async () => {
         if (isEmpty) return;
@@ -19,28 +36,50 @@ export default function Checkout() {
 
         // Simula proceso de pago
         await new Promise(r => setTimeout(r, 1200));
-        const success = Math.random() > 0.85; // Simula un 15% de probabilidad de fallo
+        const success = Math.random() > 0.15; // Simula un 15% de probabilidad de fallo
 
         setLoading(false);
+
+        const orderPayload = {
+            total,
+            itemsCount: items.length,
+            orderId: `ORD-${Date.now().toString(36).toUpperCase().slice(-6)}`,
+            reserva: {
+                telefono: form.telefono,
+                fechaPreferida: form.fechaPreferida || null,
+                horarioPreferido: form.horarioPreferido || null,
+                numeroPersonas: form.numeroPersonas || 1,
+                comentarios: form.comentarios || null,
+            },
+        };
+
         if (success) {
             clear();
             navigate('/compra-exitosa', {
-                replace: true, state: {
-                    total,
-                    itemsCount: items.length,
-                    orderId: `ORD-${Date.now().toString(36).toUpperCase().slice(-6)}`
-                }
+                replace: true,
+                state: orderPayload,
             });
         } else {
-            navigate('/compra-error', { replace: true, state: 
-                { reason: 'Transacción rechazada por el emisor.'} });
+            navigate('/compra-error', {
+                replace: true,
+                state:
+                    { reason: 'No pudimos completar el pago / reserva (simulación).' }
+            });
         }
     };
+
     return (
         <div className="container py-4">
             <h1 className="h3 mb-3">Checkout</h1>
             <p className="text-muted mb-4">
-                {user ? <>Comprador: <strong>{user.nombre}</strong> ({user.email})</> : '—'}
+                {user ? (
+                    <>
+                        Comprador:{' '}
+                        <strong>{user.nombre}</strong> ({user.email})
+                    </>
+                ) : (
+                    'Debes iniciar sesión para completar la reserva.'
+                )}
             </p>
 
             {isEmpty ? (
@@ -83,17 +122,119 @@ export default function Checkout() {
                         </table>
                     </div>
 
-                    <div className="d-flex gap-2 justify-content-end">
-                        <button
-                            className="btn btn-success"
-                            onClick={handlePay}
-                            disabled={loading}
-                        >
-                            {loading ? 'Procesando…' : 'Pagar ahora (simulación)'}
-                        </button>
+                    <div className="row g-4">
+            {/* Información del cliente */}
+            <div className="col-md-6">
+              <div className="card border-soft">
+                <div className="card-body">
+                  <h2 className="h5 mb-3">Información del cliente</h2>
+                  <div className="mb-3">
+                    <label className="form-label">Nombre</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={user?.nombre || ''}
+                      disabled
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Correo</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      value={user?.email || ''}
+                      disabled
+                    />
+                  </div>
+                  <div className="mb-0">
+                    <label className="form-label">Teléfono de contacto</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      name="telefono"
+                      placeholder="9 1234 5678"
+                      value={form.telefono}
+                      onChange={handleChange}
+                    />
+                    <div className="form-text">
+                      Usaremos este número solo para coordinar tu reserva.
                     </div>
-                </>
-            )}
-        </div>
-    );
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Preferencias de reserva */}
+            <div className="col-md-6">
+              <div className="card border-soft">
+                <div className="card-body">
+                  <h2 className="h5 mb-3">Preferencias de reserva</h2>
+
+                  <div className="mb-3">
+                    <label className="form-label">Fecha preferida</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      name="fechaPreferida"
+                      value={form.fechaPreferida}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label">Horario aproximado</label>
+                    <select
+                      className="form-select"
+                      name="horarioPreferido"
+                      value={form.horarioPreferido}
+                      onChange={handleChange}
+                    >
+                      <option value="">Selecciona un rango</option>
+                      <option value="MANANA">Mañana (09:00 - 13:00)</option>
+                      <option value="TARDE">Tarde (15:00 - 19:00)</option>
+                    </select>
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label">Número de personas</label>
+                    <input
+                      type="number"
+                      min={1}
+                      className="form-control"
+                      name="numeroPersonas"
+                      value={form.numeroPersonas}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="mb-0">
+                    <label className="form-label">Comentarios para el SPA (opcional)</label>
+                    <textarea
+                      className="form-control"
+                      rows={3}
+                      name="comentarios"
+                      value={form.comentarios}
+                      onChange={handleChange}
+                      placeholder="Ej.: Prefiero terapeuta mujer, tengo lesión en el hombro derecho, etc."
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Botón de acción */}
+          <div className="d-flex gap-2 justify-content-end mt-4">
+            <button
+              className="btn btn-success"
+              onClick={handlePay}
+              disabled={loading}
+            >
+              {loading ? 'Procesando…' : 'Pagar ahora / reservar (simulación)'}
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
