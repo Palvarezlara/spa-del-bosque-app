@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { blogGetById, blogList } from '../data/blogs';
+import { getBlogById, getBlogs } from '../data/api';
 import { formatCLDate } from '../utils/formatters';
 import BlogContent from '../components/blog/BlogContent';
 

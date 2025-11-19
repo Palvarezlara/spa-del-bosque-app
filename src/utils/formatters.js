@@ -1,4 +1,3 @@
-import React from 'react';
 
 export const CAT_LABEL = {
   masajes: "Masajes",

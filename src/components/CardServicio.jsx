@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { showToast } from '../utils/toast';
+import { CLP } from '../utils/formatters';
+
 
 export default function CardServicio({ servicio, ...rest}) {
   const s = servicio ?? rest;
@@ -11,13 +13,6 @@ export default function CardServicio({ servicio, ...rest}) {
 
   // Manejo de imagen
   const imgSrc = typeof img === 'string' ? img : (img?.default ?? '');
-
-
-  const precioCLP = new Intl.NumberFormat('es-CL', {
-    style: 'currency',
-    currency: 'CLP',
-    maximumFractionDigits: 0
-  }).format(precio)
 
   const { addItem } = useCart();
 
@@ -36,7 +31,7 @@ export default function CardServicio({ servicio, ...rest}) {
         />
         <div className="card-body d-flex flex-column">
           <h3 className="h6">{nombre} {duracionMin ? <i className="bi bi-clock"></i> : null}</h3>
-          <p className="text-muted mb-2">{precioCLP}</p>
+          <p className="text-muted mb-2">{CLP.format(precio)}</p>
           <div className="d-grid gap-2 mt-auto">
             <Link to={`/servicio/${sku}`} className="btn btn-outline-success btn-sm">Ver detalle</Link>
             <button type="button" className="btn btn-outline-success btn-sm">Agendar</button>

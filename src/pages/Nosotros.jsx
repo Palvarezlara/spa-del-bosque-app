@@ -4,7 +4,7 @@ import ValuesGrid from "../components/about/ValuesGrid";
 import TeamGrid from "../components/about/TeamGrid";
 import Timeline from "../components/about/Timeline";
 import viviImg from '.././assets/terapeutas/vivianaSchipp.webp';
-import aliciaImg from '.././assets/terapeutas/AliciaMeza.webp';
+import aliciaImg from '.././assets/terapeutas/terapeuta1.webp';
 
 export default function Nosotros() {
   const team = [

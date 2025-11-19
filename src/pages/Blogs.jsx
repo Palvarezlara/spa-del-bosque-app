@@ -1,9 +1,15 @@
-
+import { use, useEffect, useState } from 'react';
 import BlogGrid from '../components/blog/BlogGrid';
+import { getBlogs } from '../data/api';  
 import { blogList } from '../data/blogs';
 
 export default function Blogs() {
-  const posts = blogList(); // en el futuro: GET API/mockable
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    getBlogs().then(data => setPosts(data.blogs ?? []))
+      .catch(() => setPosts(blogList() ?? []));
+  }, []);
 
   return (
     <>

@@ -3,6 +3,9 @@ import { getServicios } from '../data/api';
 import { SERVICIOS as LOCAL_SERV } from '../data/data';
 import CardServicio from '../components/CardServicio';
 import CategoriaChips from '../components/CategoriaChips';
+import { CLP } from '../utils/formatters';
+
+
 
 const CATEGORIAS = [
   { id: 'masajes', label: 'Masajes' },
@@ -13,11 +16,6 @@ const CATEGORIAS = [
   { id: 'escapada-amigas', label: 'Escapada de amigas' },
 ];
 
-const CLP = new Intl.NumberFormat('es-CL', {
-  style: 'currency',
-  currency: 'CLP',
-  maximumFractionDigits: 0,
-})
 
 export default function Servicios() {
   const [servicios, setServicios] = useState([]);
