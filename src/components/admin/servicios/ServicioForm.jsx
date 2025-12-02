@@ -10,10 +10,16 @@ export default function ServicioForm({ onSubmit, initialData, onCancel }) {
     estado: "activo",
   });
 
-  // Cuando initialData cambia → rellenar para modo edición
   useEffect(() => {
     if (initialData) {
-      setForm(initialData);
+      setForm({
+        sku: initialData.sku || "",
+        nombre: initialData.nombre || "",
+        categoria: initialData.categoria || "",
+        precio: initialData.precio ?? "",
+        duracion: initialData.duracionMin ?? "",
+        estado: initialData.activo ? "activo" : "inactivo",
+      });
     } else {
       setForm({
         sku: "",
@@ -39,7 +45,7 @@ export default function ServicioForm({ onSubmit, initialData, onCancel }) {
       return;
     }
 
-    onSubmit(form);
+    onSubmit(form); // aquí AdminServicios traduce al modelo del backend
   };
 
   return (
@@ -82,7 +88,7 @@ export default function ServicioForm({ onSubmit, initialData, onCancel }) {
           type="number"
           name="precio"
           className="form-control"
-          value={form.precero}
+          value={form.precio}
           onChange={handleChange}
           required
         />
@@ -118,7 +124,11 @@ export default function ServicioForm({ onSubmit, initialData, onCancel }) {
         </button>
 
         {onCancel && (
-          <button type="button" className="btn btn-secondary" onClick={onCancel}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={onCancel}
+          >
             Cancelar
           </button>
         )}

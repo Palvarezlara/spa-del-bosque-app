@@ -14,32 +14,35 @@ export default function BlogForm({ initialData, onSubmit, onCancel }) {
   });
 
   useEffect(() => {
-    if (initialData) {
-      setForm({
-        titulo: initialData.titulo || "",
-        slug: initialData.slug || "",
-        categoria: initialData.categoria || "",
-        autor: initialData.autor || "",
-        resumen: initialData.resumen || "",
-        contenido: initialData.contenido || "",
-        imagenUrl: initialData.imagenUrl || "",
-        estado: initialData.estado || "borrador",
-        destacado: Boolean(initialData.destacado),
-      });
-    } else {
-      setForm({
-        titulo: "",
-        slug: "",
-        categoria: "",
-        autor: "",
-        resumen: "",
-        contenido: "",
-        imagenUrl: "",
-        estado: "borrador",
-        destacado: false,
-      });
-    }
-  }, [initialData]);
+  if (initialData) {
+    // Modo edición
+    setForm({
+      titulo: initialData.titulo || "",
+      slug: initialData.slug || "",
+      categoria: initialData.categoria || "",
+      autor: initialData.autor || "",
+      resumen: initialData.resumen || "",
+      contenido: initialData.contenido || "",
+      imagenUrl: initialData.imagenUrl || "",
+      estado: initialData.estado || "borrador",
+      destacado: Boolean(initialData.destacado),
+    });
+  } else {
+    // Modo creación: limpiar
+    setForm({
+      titulo: "",
+      slug: "",
+      categoria: "",
+      autor: "",
+      resumen: "",
+      contenido: "",
+      imagenUrl: "",
+      estado: "borrador",
+      destacado: false,
+    });
+  }
+}, [initialData]);
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { api } from '../api/http';
+import { api} from '../api/http';
 
 
 const AuthContext = createContext(null);
@@ -24,15 +24,25 @@ function isValidPhoneCL(str) {
 
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(() => {
+    
     try { 
-      return JSON.parse(localStorage.getItem(AUTH_KEY)) || {user: null, token: null}; 
+      const stored = JSON.parse(localStorage.getItem(AUTH_KEY));
+      if (stored && typeof stored === 'object') {
+        return {
+          user: stored.user || null,
+          token: stored.token || null,
+        };
+      }
+      return { user: null, token: null };
     }
     catch { 
       return {user: null, token: null}; }
+      
   });
 
   const user = auth.user;
-  const isLoggedIn = !!auth.user && !!auth.token;
+  const isLoggedIn = !!auth.user;
+
 
   // LOGIN contra Backend
   const login = async (email, password, remember=false)=> {
@@ -40,22 +50,27 @@ export function AuthProvider({ children }) {
       return { ok: false, error: 'Debes ingresar correo y contraseña'};
     }
     try{
-      const res = await api.post('/users/auth/login', { email, password });
-      const {token, user} = res.data;
+      const res = await api.post('/api/v1/users/login', { email, password });
+      const data = res.data;
+      const userFromApi = data.user || data;
+      const tokenFromApi = data.token || null; 
 
-      const authData = {token, user};
+      const authData = { user: userFromApi, token: tokenFromApi };
+
+
       setAuth(authData);
       localStorage.setItem(AUTH_KEY, JSON.stringify(authData));
+
       if(remember)
         localStorage.setItem(REMEMBER_KEY, '1');
       else
         localStorage.removeItem(REMEMBER_KEY);
 
-      return {ok: true, user};
+      return {ok: true, user: userFromApi};
     } catch (err){
       const msg =
       err.response?.data?.message ||
-      err.responde?.data?.error ||
+      err.response?.data?.error ||
       'Correo o contraseña incorrectos';
       return { ok: false, error: msg };
     }
@@ -63,13 +78,14 @@ export function AuthProvider({ children }) {
 
   // REGISTRO contra backend
   const register = async ({
-    nombre,
-    apellido,
+    nombres,
+    apellidos,
     email,
     password,
     telefono,
     region,
     comuna,
+    fechaNacimiento,
   }) => {
     if (!isValidEmailDomain(email)) {
       return { ok: false, error: 'Dominio de correo no permitido' };
@@ -79,14 +95,15 @@ export function AuthProvider({ children }) {
     }
 
     try {
-      await api.post('/users', {
-        nombre,
-        apellido,
+      await api.post('/api/v1/users/register', {
+        nombres,
+        apellidos,
         email: email.trim(),
         password,
         telefono: normalizePhone(telefono),
         region,
         comuna,
+        fechaNacimiento: fechaNacimiento || null,
       });
 
       // El backend creó el usuario; el frontend luego redirige al login
@@ -107,12 +124,34 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(REMEMBER_KEY);
   };
 
+  const updateUserProfile = (updatedUserOrPartial) => {
+    setAuth((prev) => {
+      if (!prev?.user) return prev;
+
+      const newUser = updatedUserOrPartial.id
+        ? updatedUserOrPartial
+        : { ...prev.user, ...updatedUserOrPartial };
+
+      const nextAuth = { ...prev, user: newUser };
+      localStorage.setItem(AUTH_KEY, JSON.stringify(nextAuth));
+      return nextAuth;
+    });
+  }; 
 
   // Sincronización entre pestañas 
   useEffect(() => {
     const onStorage = (e) => {
       if (e.key === AUTH_KEY) {
-        setAuth(e.newValue ? JSON.parse(e.newValue) : {user: null, token: null});
+        try {
+          const value = e.newValue ? JSON.parse(e.newValue) : null;
+          setAuth(
+            value
+              ? { user: value.user || null, token: value.token || null }
+              : { user: null, token: null }
+          );
+        } catch {
+          setAuth({ user: null, token: null });
+        }
       }
     };
     window.addEventListener('storage', onStorage);
@@ -120,7 +159,15 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, token: auth.token, isLoggedIn, login, register, logout }),
+    () => ({
+      user,
+      token: auth.token, // quedará null, pero no rompe componentes que lo lean
+      isLoggedIn,
+      login,
+      register,
+      logout,
+      updateUserProfile,
+    }),
     [auth, user, isLoggedIn]
   );
 

@@ -1,18 +1,18 @@
-import relajacionImg from '/Productos/relajacion.webp'
-import descontracturanteImg from '/Productos/descontracturante.webp'
-import piedrasCalientesImg from '/Productos/piedras-calientes.webp'
-import bosqueImg from '/Productos/bosque.webp'
-import olivoterapiaImg from '/Productos/olivoterapia.webp'
-import chocolaterapiaImg from '/Productos/chocolaterapia.webp'
-import exfoliacionImg from '/Productos/exfoliacion.webp'
-import circuitoImg from '/Productos/circuito.webp'
-import saunaImg from '/Productos/sauna.webp'
-import renovacionImg from '/Productos/renovacion.webp'
-import dulceAventuraImg from '/Productos/dulceaventura.webp'
-import dayUseImg from '/Productos/dayuse.webp'
-import bosqueNativoImg from '/Productos/bosqueNativo.webp'
-import bosqueMagicoImg from '/Productos/bosqueMagico.webp'
-import escapadaAmigasImg from '/Productos/EscapadaAmigas.webp'
+const relajacionImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/relajacion.webp";
+const descontracturanteImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/descontracturante.webp";
+const piedrasCalientesImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/piedras-calientes.webp";
+const bosqueImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/bosque.webp";
+const olivoterapiaImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/olivoterapia.webp";
+const chocolaterapiaImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/chocolaterapia.webp";
+const exfoliacionImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/exfoliacion.webp";
+const circuitoImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/circuito.webp";
+const saunaImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/sauna.webp";
+const renovacionImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/renovacion.webp";
+const dulceAventuraImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/dulceaventura.webp";
+const dayUseImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/dayuse.webp";
+const bosqueNativoImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/bosqueNativo.webp";
+const bosqueMagicoImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/bosqueMagico.webp";
+const escapadaAmigasImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/imagenes-servicios/EscapadaAmigas.webp";
 
 export const SERVICIOS = [
   // MASAJES

@@ -11,27 +11,19 @@ import {
 export default function AdminServicios() {
   const [servicios, setServicios] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [servicioEditando, setServicioEditando] = useState(null);
+  const [error, setError] = useState(null);
 
-  // === Cargar servicios desde el backend ===
+  // ====== Cargar desde backend ======
   const cargarServicios = async () => {
     try {
       setLoading(true);
       setError(null);
-
       const data = await getServicios();
-
-      // Nuestro catalogApi devuelve directamente un array
-      const lista = Array.isArray(data)
-        ? data
-        : data?.servicios ?? [];
-
-      setServicios(lista);
+      setServicios(data);
     } catch (err) {
       console.error("Error cargando servicios:", err);
       setError("Ocurrió un error al cargar los servicios.");
-      setServicios([]);
     } finally {
       setLoading(false);
     }
@@ -41,44 +33,47 @@ export default function AdminServicios() {
     cargarServicios();
   }, []);
 
-  // === Crear / Editar servicio ===
+  // Normalizar servicio backend → datos para el formulario
+  const mapToFormData = (s) => ({
+    id: s.id,
+    sku: s.sku ?? "",
+    nombre: s.nombre ?? "",
+    categoria: s.categoria ?? "",
+    precio: s.precio ?? "",
+    duracion: s.duracionMin ?? "",
+    estado: s.activo ? "activo" : "inactivo",
+  });
+
+  // ====== Crear / Editar ======
   const guardarServicio = async (formData) => {
     try {
       setError(null);
 
-      // Normalizamos el payload al modelo de Spring
       const payload = {
-        sku: (formData.sku ?? "").trim(),
-        nombre: (formData.nombre ?? "").trim(),
-        categoria: formData.categoria || "masajes",
+        sku: formData.sku.trim(),
+        nombre: formData.nombre.trim(),
+        categoria: formData.categoria || "otros",
         precio: Number(formData.precio ?? 0),
-        duracionMin: Number(formData.duracion ?? formData.duracionMin ?? 0),
-        activo:
-          formData.estado === "activo" ||
-          formData.activo === true,
+        duracionMin: Number(formData.duracion || 0),
+        // por ahora sin descripcion ni imageUrl
+        activo: formData.estado === "activo",
       };
 
-      if (!payload.sku || !payload.nombre) {
-        throw new Error("SKU y nombre son obligatorios");
-      }
-
-      if (servicioEditando?.id) {
-        // UPDATE
-        await updateServicio(servicioEditando.id, payload);
+      if (formData.id) {
+        await updateServicio(formData.id, payload);
       } else {
-        // CREATE
         await createServicio(payload);
       }
 
       await cargarServicios();
       setServicioEditando(null);
     } catch (err) {
-      console.error("Error al guardar servicio:", err);
+      console.error("Error guardando servicio:", err);
       setError("No se pudo guardar el servicio. Intenta nuevamente.");
     }
   };
 
-  // === Eliminar servicio ===
+  // ====== Eliminar ======
   const eliminarServicio = async (id) => {
     const confirmar = window.confirm(
       "¿Seguro que deseas eliminar este servicio? Esta acción no se puede deshacer."
@@ -90,23 +85,27 @@ export default function AdminServicios() {
       await deleteServicio(id);
       await cargarServicios();
     } catch (err) {
-      console.error("Error al eliminar servicio:", err);
+      console.error("Error eliminando servicio:", err);
       setError("No se pudo eliminar el servicio.");
     }
   };
 
   const cancelarEdicion = () => setServicioEditando(null);
 
+  const handleEditClick = (servicio) => {
+    setServicioEditando(mapToFormData(servicio));
+  };
+
   return (
     <section>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="h4 mb-0">Administrar Servicios</h2>
+        <h2 className="h4 mb-0">Administrar servicios</h2>
         <button
           className="btn btn-success"
           onClick={() => setServicioEditando(null)}
         >
           <i className="bi bi-plus-circle me-2" />
-          Nuevo Servicio
+          Nuevo servicio
         </button>
       </div>
 
@@ -119,6 +118,9 @@ export default function AdminServicios() {
       {/* Formulario */}
       <div className="card mb-4 shadow-sm">
         <div className="card-body">
+          <h5 className="card-title mb-3">
+            {servicioEditando ? "Editar servicio" : "Crear nuevo servicio"}
+          </h5>
           <ServicioForm
             initialData={servicioEditando}
             onSubmit={guardarServicio}
@@ -131,12 +133,13 @@ export default function AdminServicios() {
       <div className="card shadow-sm">
         <div className="card-body">
           <h5 className="card-title mb-3">Listado de servicios</h5>
+
           {loading ? (
             <p>Cargando servicios...</p>
           ) : (
             <ServicioTable
               servicios={servicios}
-              onEdit={setServicioEditando}
+              onEdit={handleEditClick}
               onDelete={eliminarServicio}
             />
           )}

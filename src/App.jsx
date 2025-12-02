@@ -16,6 +16,7 @@ import CompraExitosa from './pages/CompraExitosa';
 import CompraError from './pages/CompraError';
 import Checkout from './pages/Checkout';
 import RequireAuth from './components/RequireAuth';
+import RequireRole from './components/admin/RequireRole';
 import ServicioDetalle from './pages/ServicioDetalle';
 
 // Páginas admin
@@ -76,7 +77,9 @@ export default function App() {
         element={
           // Luego aquí puedes cambiar por un guard de rol (admin)
           <RequireAuth>
-            <AdminLayout />
+            <RequireRole allowed="ADMIN">
+            <AdminLayout />            
+          </RequireRole>
           </RequireAuth>
         }
       >

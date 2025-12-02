@@ -13,7 +13,11 @@ export default function Navigation() {
           
   // Más adelante esto vendrá de un AuthContext (o localStorage).
   const usuario = null; // O un objeto { nombre: "Ana" }
-
+  const esAdmin =
+    isLoggedIn &&
+    user &&
+    String(user.rol || user.role || "").toUpperCase() === "ADMIN";
+    
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
@@ -108,7 +112,7 @@ export default function Navigation() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Hola, {user?.nombre?.split(" ")[0] || "Usuario"}
+                  Hola, {user?.nombres?.split(" ")[0] || "Usuario"}
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end">
                   <li>
@@ -116,6 +120,13 @@ export default function Navigation() {
                       Mi cuenta
                     </NavLink>
                   </li>
+                  {esAdmin && (
+                    <li>
+                      <Link className="dropdown-item" to="/admin">
+                        Panel de administración
+                      </Link>
+                    </li>
+                  )}
                   <li><hr className="dropdown-divider" /></li>
                   <li>
                     <button

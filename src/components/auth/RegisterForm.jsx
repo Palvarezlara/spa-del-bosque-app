@@ -27,7 +27,8 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { nombre, apellido, email, password, telefono, region, comuna } = form;
-    const res = await register({ nombre, apellido, email, password, telefono, region, comuna });
+    const payload = { nombres: nombre, apellidos: apellido, email, password, telefono, region, comuna };
+    const res = await register(payload);
 
     if (!res.ok) {
       // muestra error (toast/alert)

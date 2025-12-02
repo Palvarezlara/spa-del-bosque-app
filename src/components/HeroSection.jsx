@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import heroImg from '../assets/front.webp';
-
+const HERO_IMG_URL =
+  "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/spa/banners/front.webp";
+  
 export default function HeroSection() {
   return (
     <header className="py-4 bg-light border-bottom">
@@ -23,7 +24,7 @@ export default function HeroSection() {
           </div>
           <div className="col-12 col-md-6">
             <img
-              src={heroImg}
+              src={HERO_IMG_URL}
               className="img-fluid rounded shadow-sm"
               alt="Entrada SPA"
               width={520}

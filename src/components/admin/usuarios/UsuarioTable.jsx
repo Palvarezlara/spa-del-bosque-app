@@ -25,7 +25,7 @@ export default function UsuarioTable({
         <tbody>
           {usuarios.map((u) => (
             <tr key={u.id}>
-              <td>{u.nombre}</td>
+              <td>{u.nombreCompleto || `${u.nombres} ${u.apellidos}`}</td>
               <td>{u.email}</td>
               <td>
                 <span className="badge bg-info text-dark text-capitalize">

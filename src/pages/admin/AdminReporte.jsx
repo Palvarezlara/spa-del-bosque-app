@@ -1,7 +1,5 @@
 import React from "react";
 
-// src/pages/Admin/AdminReporte.jsx
-
 const AdminReporte = () => {
     const path = typeof window !== "undefined" ? window.location.pathname : "";
 

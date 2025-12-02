@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 function AdminSidebar() {
   return (
@@ -22,6 +22,11 @@ function AdminSidebar() {
           Reportes
         </NavLink>
       </nav>
+      <div className="mt-auto">
+        <Link to="/" className="btn btn-outline-success w-100 btn-sm">
+          Ir al sitio web
+        </Link>
+      </div>
     </aside>
   );
 }

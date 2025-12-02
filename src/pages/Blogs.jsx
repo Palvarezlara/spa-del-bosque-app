@@ -1,14 +1,24 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import BlogGrid from '../components/blog/BlogGrid';
-import { getBlogs } from '../data/api';  
+import { getBlogs } from '../api/blogApi';
 import { blogList } from '../data/blogs';
 
 export default function Blogs() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    getBlogs().then(data => setPosts(data.blogs ?? []))
-      .catch(() => setPosts(blogList() ?? []));
+    getBlogs()
+      .then((data) => {
+        const lista = Array.isArray(data) ? data : data?.blogs ?? [];
+        if (!lista.length) {
+          setPosts(blogList() ?? []);
+        } else {
+          setPosts(lista);
+        }
+      })
+      .catch(() => {
+        setPosts(blogList() ?? []);
+      });
   }, []);
 
   return (
@@ -16,7 +26,9 @@ export default function Blogs() {
       <header className="py-5 bg-light border-bottom">
         <div className="container">
           <h1 className="display-6">Blog de bienestar</h1>
-          <p className="lead mb-0">Consejos, rutinas y novedades para cuidarte cuerpo y mente.</p>
+          <p className="lead mb-0">
+            Consejos, rutinas y novedades para cuidarte cuerpo y mente.
+          </p>
         </div>
       </header>
 

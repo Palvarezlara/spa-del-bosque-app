@@ -1,7 +1,14 @@
-// src/pages/admin/AdminBlogs.jsx
 import { useEffect, useState } from "react";
 import BlogForm from "../../components/admin/blog/BlogForm";
 import BlogTable from "../../components/admin/blog/BlogTable";
+import {
+  getBlogs,
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  updateBlogEstado,
+  updateBlogDestacado,
+} from "../../api/blogApi";
 
 export default function AdminBlogs() {
   const [blogs, setBlogs] = useState([]);
@@ -9,8 +16,9 @@ export default function AdminBlogs() {
   const [blogEditando, setBlogEditando] = useState(null);
   const [error, setError] = useState(null);
 
-  // Ajusta esta URL cuando tu API-Gateway esté listo
-  const API_URL = "http://localhost:7000/api/blogs";
+  const normalizarLista = (data) =>
+    Array.isArray(data) ? data : data?.blogs ?? [];
+
 
   // ====== GET blogs ======
   const cargarBlogs = async () => {
@@ -18,11 +26,8 @@ export default function AdminBlogs() {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error("No se pudo obtener la lista de blogs");
-
-      const data = await res.json();
-      setBlogs(data);
+      const data = await getBlogs();
+      setBlogs(normalizarLista(data));
     } catch (err) {
       console.error(err);
       setError("Ocurrió un error al cargar los blogs.");
@@ -40,32 +45,27 @@ export default function AdminBlogs() {
     try {
       setError(null);
 
-      const esEdicion = Boolean(blogEditando);
-      const url = esEdicion ? `${API_URL}/${blogEditando.id}` : API_URL;
-      const metodo = esEdicion ? "PUT" : "POST";
-
-      // Si el estado es "publicado" y no tiene fechaPublicacion, la asignamos
       const payload = {
         ...formData,
+        // si quieres asegurar valores:
+        destacado: !!formData.destacado,
       };
 
-      const res = await fetch(url, {
-        method: metodo,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) throw new Error("Error al guardar blog");
+      if (blogEditando) {
+        await updateBlog(blogEditando.id, payload);
+      } else {
+        await createBlog(payload);
+      }
 
       await cargarBlogs();
       setBlogEditando(null);
+      
     } catch (err) {
       console.error(err);
       setError("No se pudo guardar el blog. Intenta nuevamente.");
     }
   };
+
 
   // ====== DELETE ======
   const eliminarBlog = async (id) => {
@@ -76,13 +76,7 @@ export default function AdminBlogs() {
 
     try {
       setError(null);
-
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) throw new Error("Error al eliminar blog");
-
+      await deleteBlog(id);
       await cargarBlogs();
     } catch (err) {
       console.error(err);
@@ -97,17 +91,7 @@ export default function AdminBlogs() {
 
     try {
       setError(null);
-
-      const res = await fetch(`${API_URL}/${blog.id}/estado`, {
-        method: "PATCH", // o PUT según definas en backend
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ estado: nuevoEstado }),
-      });
-
-      if (!res.ok) throw new Error("Error al actualizar estado");
-
+      await updateBlogEstado(blog.id, nuevoEstado);
       await cargarBlogs();
     } catch (err) {
       console.error(err);
@@ -121,17 +105,7 @@ export default function AdminBlogs() {
 
     try {
       setError(null);
-
-      const res = await fetch(`${API_URL}/${blog.id}/destacado`, {
-        method: "PATCH", // o PUT
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ destacado: nuevoDestacado }),
-      });
-
-      if (!res.ok) throw new Error("Error al actualizar destacado");
-
+      await updateBlogDestacado(blog.id, nuevoDestacado);
       await cargarBlogs();
     } catch (err) {
       console.error(err);

@@ -1,7 +1,7 @@
-// components/admin/servicios/ServicioTable.jsx
-
 export default function ServicioTable({ servicios, onEdit, onDelete }) {
-  if (!servicios || servicios.length === 0) {
+  const lista = Array.isArray(servicios) ? servicios : [];
+
+  if (!lista.length) {
     return <p className="text-muted">No hay servicios registrados.</p>;
   }
 
@@ -21,21 +21,20 @@ export default function ServicioTable({ servicios, onEdit, onDelete }) {
         </thead>
 
         <tbody>
-          {servicios.map((s) => (
+          {lista.map((s) => (
             <tr key={s.id}>
               <td>{s.sku}</td>
               <td>{s.nombre}</td>
               <td>{s.categoria}</td>
-              <td>${s.precio.toLocaleString("es-CL")}</td>
-              <td>{s.duracion} min</td>
+              <td>${(s.precio ?? 0).toLocaleString("es-CL")}</td>
+              <td>{s.duracionMin} min</td>
               <td>
                 <span
                   className={
-                    "badge " +
-                    (s.estado === "activo" ? "bg-success" : "bg-secondary")
+                    "badge " + (s.activo ? "bg-success" : "bg-secondary")
                   }
                 >
-                  {s.estado}
+                  {s.activo ? "ACTIVO" : "INACTIVO"}
                 </span>
               </td>
 
@@ -45,14 +44,14 @@ export default function ServicioTable({ servicios, onEdit, onDelete }) {
                     className="btn btn-outline-primary"
                     onClick={() => onEdit(s)}
                   >
-                    <i className="bi bi-pencil"></i>
+                    <i className="bi bi-pencil" />
                   </button>
 
                   <button
                     className="btn btn-outline-danger"
                     onClick={() => onDelete(s.id)}
                   >
-                    <i className="bi bi-trash"></i>
+                    <i className="bi bi-trash" />
                   </button>
                 </div>
               </td>

@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import masajesImg from '../assets/categorias/masajes.webp';
-import corporalesImg from '../assets/categorias/corporales.webp';
-import circuitoSaunaImg from '../assets/categorias/circuito-sauna.webp';
-import programaIndividualesImg from '../assets/categorias/programas-individuales.webp';
-import programaParejasImg from '../assets/categorias/programas-en-pareja.webp';
-import escapadaAmigasImg from '../assets/categorias/escapada-amigas.webp';
 
-
+const masajesImg =  "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/categorias/masajes.webp";
+const corporalesImg =  "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/categorias/corporales.webp";
+const circuitoSaunaImg =  "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/categorias/circuito-sauna.webp";
+const programaIndividualesImg =  "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/categorias/programas-individuales.webp";
+const programaParejasImg =  "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/categorias/programas-en-pareja.webp";
+const escapadaAmigasImg =  "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/servicios/categorias/escapada-amigas.webp";
 
 // Cada categoría tiene título, imagen y ancla 
 const categorias = [

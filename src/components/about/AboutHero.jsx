@@ -1,4 +1,4 @@
-import heroImg from '../../assets/front.webp';
+const heroImg = "https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/spa/banners/front.webp";
 
 export default function AboutHero({
   title = "Sobre nosotros",

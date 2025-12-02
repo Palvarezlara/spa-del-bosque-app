@@ -3,8 +3,9 @@ import MissionVision from "../components/about/MissionVision";
 import ValuesGrid from "../components/about/ValuesGrid";
 import TeamGrid from "../components/about/TeamGrid";
 import Timeline from "../components/about/Timeline";
-import viviImg from '.././assets/terapeutas/vivianaSchipp.webp';
-import aliciaImg from '.././assets/terapeutas/terapeuta1.webp';
+
+const viviImg = 'https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/terapeutas/vivianaSchipp.webp';
+const aliciaImg = 'https://spa-del-bosque-media.s3.us-east-1.amazonaws.com/terapeutas/terapeuta1.webp';
 
 export default function Nosotros() {
   const team = [

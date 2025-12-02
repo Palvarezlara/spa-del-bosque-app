@@ -1,7 +1,16 @@
-// src/pages/admin/AdminUsuarios.jsx
+
 import { useEffect, useState } from "react";
 import UsuarioForm from "../../components/admin/usuarios/UsuarioForm";
 import UsuarioTable from "../../components/admin/usuarios/UsuarioTable";
+import {
+  getUsuarios,
+  createUsuario,
+  updateUsuario,
+  deleteUsuario,
+  updateUsuarioRol,
+  updateUsuarioEstado,
+} from "../../api/userApi";
+import { showToast } from "../../utils/toast";
 
 export default function AdminUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -9,22 +18,42 @@ export default function AdminUsuarios() {
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [error, setError] = useState(null);
 
-  // Ajusta esta URL cuando el API-Gateway esté definido
-  const API_URL = "http://localhost:7000/api/usuarios";
+  // =========================
+  // Helpers
+  // =========================
+  const splitNombre = (fullName) => {
+    const texto = (fullName || "").trim();
+    if (!texto) return { nombres: "", apellidos: "" };
 
-  // ====== Cargar usuarios (GET) ======
+    const partes = texto.split(/\s+/);
+    if (partes.length === 1) return { nombres: partes[0], apellidos: "" };
+
+    return {
+      nombres: partes.slice(0, -1).join(" "),
+      apellidos: partes.slice(-1).join(" "),
+    };
+  };
+
+  const resetForm = () => {
+    setUsuarioEditando(null);
+  };
+
+  // =========================
+  // Cargar usuarios (GET)
+  // =========================
   const cargarUsuarios = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(API_URL);
-      if (!res.ok) {
-        throw new Error("No se pudo obtener la lista de usuarios");
-      }
+      const data = await getUsuarios();
 
-      const data = await res.json();
-      setUsuarios(data);
+      const normalizados = (Array.isArray(data) ? data : []).map((u) => ({
+      ...u,
+      nombreCompleto: `${u.nombres ?? ""} ${u.apellidos ?? ""}`.trim(),
+    }));
+    
+      setUsuarios(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error cargando usuarios:", err);
       setError("Ocurrió un error al cargar los usuarios.");
@@ -37,37 +66,80 @@ export default function AdminUsuarios() {
     cargarUsuarios();
   }, []);
 
-  // ====== Crear / Editar usuario (POST / PUT) ======
+  // =========================
+  // Crear / editar usuario
+  // =========================
   const guardarUsuario = async (formData) => {
     try {
       setError(null);
 
-      const esEdicion = Boolean(usuarioEditando);
-      const url = esEdicion ? `${API_URL}/${usuarioEditando.id}` : API_URL;
-      const metodo = esEdicion ? "PUT" : "POST";
+      const nombreCompleto = formData.nombreCompleto ?? formData.nombre ?? "";
+      const { nombres, apellidos } = splitNombre(nombreCompleto);
+      const email = (formData.email || "").trim();
+      const rol = (formData.rol || "CLIENTE").toUpperCase();
+      const estado = (formData.estado || "ACTIVO").toUpperCase();
 
-      const res = await fetch(url, {
-        method: metodo,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) {
-        throw new Error("Error al guardar usuario");
+      if (!email || !nombreCompleto.trim()) {
+        showToast("error", "Nombre y correo son obligatorios.");
+        return;
       }
 
-      // Recargar lista desde backend para mantener verdad única
+      if (!usuarioEditando) {
+        // -------- CREAR (POST /register) --------
+        let creado = await createUsuario({
+          nombres,
+          apellidos,
+          email,
+          password: "12345678", // password por defecto
+          telefono: null,
+          region: null,
+          comuna: null,
+          fechaNacimiento: null,
+        });
+
+        // Ajustar rol / estado si el admin eligió algo distinto
+        if (rol && rol !== (creado.rol || "CLIENTE")) {
+          creado = await updateUsuarioRol(creado.id, rol);
+        }
+        if (estado && estado !== (creado.estado || "ACTIVO")) {
+          creado = await updateUsuarioEstado(creado.id, estado);
+        }
+
+        showToast(
+          "success",
+          "Usuario creado correctamente. Password por defecto: 12345678."
+        );
+      } else {
+        // -------- EDITAR (PUT + PATCH) --------
+        const id = usuarioEditando.id;
+        const original = usuarios.find((u) => u.id === id) || {};
+
+        let actualizado = await updateUsuario(id, {
+          nombres,
+          apellidos,
+          telefono: original.telefono ?? null,
+          region: original.region ?? null,
+          comuna: original.comuna ?? null,
+          fechaNacimiento: original.fechaNacimiento ?? null,
+        });
+
+        actualizado = await updateUsuarioRol(id, rol);
+        actualizado = await updateUsuarioEstado(id, estado);
+
+        showToast("success", "Usuario actualizado correctamente.");
+      }
+
+      resetForm();
       await cargarUsuarios();
-      setUsuarioEditando(null);
     } catch (err) {
-      console.error(err);
+      console.error("Error guardando usuario:", err);
       setError("No se pudo guardar el usuario. Intenta nuevamente.");
     }
   };
 
-  // ====== Eliminar usuario (DELETE) ======
+  // =========================
+  // Eliminar usuario
+  // =========================
   const eliminarUsuario = async (id) => {
     const confirmar = window.confirm(
       "¿Seguro que deseas eliminar este usuario? Esta acción no se puede deshacer."
@@ -77,14 +149,8 @@ export default function AdminUsuarios() {
     try {
       setError(null);
 
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) {
-        throw new Error("Error al eliminar usuario");
-      }
-
+      await deleteUsuario(id);
+      showToast("success", "Usuario eliminado correctamente.");
       await cargarUsuarios();
     } catch (err) {
       console.error(err);
@@ -92,26 +158,19 @@ export default function AdminUsuarios() {
     }
   };
 
-  // ====== Cambiar estado (ej: activo ↔ inactivo) ======
+  // =========================
+  // Cambiar estado (ACTIVO / INACTIVO)
+  // =========================
   const toggleEstadoUsuario = async (usuario) => {
+    const estadoActual = (usuario.estado || "ACTIVO").toUpperCase();
     const nuevoEstado =
-      usuario.estado === "activo" ? "inactivo" : "activo";
+      estadoActual === "ACTIVO" ? "INACTIVO" : "ACTIVO";
 
     try {
       setError(null);
 
-      const res = await fetch(`${API_URL}/${usuario.id}/estado`, {
-        method: "PATCH", // o "PUT" según como lo diseñes en backend
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ estado: nuevoEstado }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Error al actualizar estado de usuario");
-      }
-
+      await updateUsuarioEstado(usuario.id, nuevoEstado);
+      showToast("success", "Estado actualizado correctamente.");
       await cargarUsuarios();
     } catch (err) {
       console.error(err);
@@ -119,10 +178,22 @@ export default function AdminUsuarios() {
     }
   };
 
-  // ====== Reset formulario ======
+  // =========================
+  // Reset formulario
+  // =========================
   const cancelarEdicion = () => {
-    setUsuarioEditando(null);
+    resetForm();
   };
+
+  // Para que el formulario reciba "nombre completo" ya combinado
+  const initialFormData = usuarioEditando
+    ? {
+        ...usuarioEditando,
+        nombreCompleto: `${usuarioEditando.nombres ?? ""} ${
+          usuarioEditando.apellidos ?? ""
+        }`.trim(),
+      }
+    : null;
 
   return (
     <section>
@@ -150,7 +221,7 @@ export default function AdminUsuarios() {
             {usuarioEditando ? "Editar usuario" : "Crear nuevo usuario"}
           </h5>
           <UsuarioForm
-            initialData={usuarioEditando}
+            initialData={initialFormData}
             onSubmit={guardarUsuario}
             onCancel={cancelarEdicion}
           />
