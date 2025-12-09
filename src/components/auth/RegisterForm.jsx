@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import REGIONES_COMUNAS from '../../data/regiones';
 
 export default function RegisterForm() {
   const { register } = useAuth();
@@ -18,6 +19,20 @@ export default function RegisterForm() {
   comuna: ""
 });
 
+  const handleChange = (field) => (e) => {
+  const value = e.target.value;
+
+  setForm((prev) => ({
+    ...prev,
+    [field]: value,
+    // Si cambia la región, limpiamos comuna
+    ...(field === "region" ? { comuna: "" } : {}),
+    }));
+  };
+  const comunasDisponibles = form.region
+            ? REGIONES_COMUNAS[form.region]
+            : [];
+
 
   const [err, setErr] = useState('');
 
@@ -26,7 +41,11 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { nombre, apellido, email, password, telefono, region, comuna } = form;
+    const { nombre, apellido, email, password, password2, telefono, region, comuna } = form;
+    if (password !== password2) {
+    setErr("Las contraseñas no coinciden.");
+    return;
+   }
     const payload = { nombres: nombre, apellidos: apellido, email, password, telefono, region, comuna };
     const res = await register(payload);
 
@@ -95,26 +114,38 @@ export default function RegisterForm() {
       <div className="row">
         <div className="col-md-6 mb-3">
           <label htmlFor="region" className="form-label">Región</label>
-          <select id="region" className="form-select"
-                  value={form.region} onChange={onChange}>
-            <option value="">Selecciona tu región</option>
-            <option>Valparaíso</option>
-            <option>Metropolitana de Santiago</option>
-            <option>Biobío</option>
-            <option>Coquimbo</option>
+          <select
+              id="region"
+              className="form-select"
+              value={form.region}
+              onChange={handleChange("region")}
+            >
+              <option value="">Selecciona tu región</option>
+              {Object.keys(REGIONES_COMUNAS).map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))}
           </select>
+
         </div>
         <div className="col-md-6 mb-3">
           <label htmlFor="comuna" className="form-label">Comuna</label>
-          <select id="comuna" className="form-select"
-                  value={form.comuna} onChange={onChange}>
-            <option value="">Selecciona tu comuna</option>
-            <option>Viña del Mar</option><option>Valparaíso</option>
-            <option>Quilpué</option><option>Concón</option>
-            <option>Santiago</option><option>Providencia</option>
-            <option>La Serena</option><option>Coquimbo</option>
-            <option>Concepción</option><option>Talcahuano</option>
-          </select>
+              <select
+                  id="comuna"
+                  className="form-select"
+                  value={form.comuna}
+                  onChange={handleChange("comuna")}
+                  disabled={!form.region}   // 👈 deshabilitado si no hay región
+                >
+                  <option value="">Selecciona tu comuna</option>
+                  {comunasDisponibles.map((comuna) => (
+                    <option key={comuna} value={comuna}>
+                      {comuna}
+                    </option>
+                  ))}
+              </select>
+
         </div>
       </div>
 

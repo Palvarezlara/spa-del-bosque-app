@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import defaultAvatar from "../assets/default-avatar.webp";
 import { showToast } from "../utils/toast";
 import { updateUsuario } from "../api/userApi";
+import REGIONES_COMUNAS from '../data/regiones';
 
 export default function Perfil() {
   const { user, isLoggedIn, logout, updateUserProfile } = useAuth();
@@ -24,8 +25,20 @@ export default function Perfil() {
     fechaNacimiento: "",
   });
 
+
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Fecha máxima permitida: hoy menos 18 años
+  const today = new Date();
+  const maxBirthDate = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  )
+    .toISOString()
+    .slice(0, 10); // 'yyyy-MM-dd'
+
 
   // Cargar foto de perfil desde localStorage
   useEffect(() => {
@@ -40,19 +53,28 @@ export default function Perfil() {
       return;
     }
     if (user) {
+      // Normalizar fecha para el input type="date"
+      let fechaNacimiento = user.fechaNacimiento ?? "";
+      if (fechaNacimiento) {
+        // Si viene como "2025-12-09T00:00:00" o similar, nos quedamos con los primeros 10 caracteres
+        fechaNacimiento = fechaNacimiento.toString().slice(0, 10);
+      }
+
       const basePerfil = {
         nombre: user.nombres ?? user.nombre ?? "",
         apellido: user.apellidos ?? user.apellido ?? "",
         email: user.email ?? "",
         telefono: user.telefono ?? "",
-        fechaNacimiento: user.fechaNacimiento ?? "",
+        fechaNacimiento,
         region: user.region ?? "",
         comuna: user.comuna ?? "",
       };
+
       setPerfil(basePerfil);
       setForm(basePerfil);
     }
   }, [isLoggedIn, navigate, user]);
+
 
   // Mock de historial de reservas (futuro GET /reservas/:userId)
   const [reservas] = useState([
@@ -94,6 +116,20 @@ export default function Perfil() {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
+  const handleSelect= (field) => (e) => {
+    const value = e.target.value;
+
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+      // Si cambia la región, limpiamos comuna
+      ...(field === "region" ? { comuna: "" } : {}),
+      }));
+  };
+  const comunasDisponibles = form.region
+            ? REGIONES_COMUNAS[form.region]
+            : [];
+
   const handleStartEdit = () => {
     if (perfil) setForm(perfil);
     setEditing(true);
@@ -113,24 +149,29 @@ export default function Perfil() {
 
     setSaving(true);
     try {
-      // Por ahora NO enviamos fechaNacimiento para evitar el 400
+    
       const payload = {
         nombres: form.nombre.trim(),
         apellidos: form.apellido.trim(),
         telefono: form.telefono,
         region: form.region,
         comuna: form.comuna,
-        // fechaNacimiento se agrega más adelante cuando quieras
+        fechaNacimiento: form.fechaNacimiento || null, // yyyy-MM-dd
       };
 
       const updated = await updateUsuario(user.id, payload);
+
+      let fechaNacimientoNormalizada = updated.fechaNacimiento ?? "";
+      if (fechaNacimientoNormalizada) {
+          fechaNacimientoNormalizada = fechaNacimientoNormalizada.toString().slice(0, 10);
+    }
 
       const nuevoPerfil = {
         nombre: updated.nombres,
         apellido: updated.apellidos,
         email: updated.email,
         telefono: updated.telefono,
-        fechaNacimiento: updated.fechaNacimiento ?? "",
+        fechaNacimiento: fechaNacimientoNormalizada,
         region: updated.region ?? "",
         comuna: updated.comuna ?? "",
       };
@@ -234,39 +275,52 @@ export default function Perfil() {
                   />
                 </div>
                 <div className="col-md-6">
-                  <label className="form-label small text-muted">
-                    Fecha de nacimiento
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={form.fechaNacimiento || ""}
-                    onChange={handleChange("fechaNacimiento")}
-                    readOnly={!editing}
-                  />
+                    <label className="form-label small text-muted">
+                      Fecha de nacimiento
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={form.fechaNacimiento || ""}
+                      onChange={handleChange("fechaNacimiento")}
+                      disabled={!editing}       
+                      max={maxBirthDate}                      //no menores de 18 años
+                      min="1900-01-01"                        //fecha mínima razonable
+                    />
                 </div>
                 <div className="col-md-6">
                   <label className="form-label small text-muted">Región</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={form.region}
-                    onChange={handleChange("region")}
-                    readOnly={!editing}
-                  />
+                  <select
+                      className="form-select"
+                      value={form.region}
+                      onChange={handleSelect("region")}
+                      disabled={!editing}
+                    >
+                      <option value="">Selecciona tu región</option>
+                      {Object.keys(REGIONES_COMUNAS).map((region) => (
+                        <option key={region} value={region}>
+                          {region}
+                        </option>
+                      ))}
+                  </select>
                 </div>
                 <div className="col-md-6">
                   <label className="form-label small text-muted">Comuna</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={form.comuna}
-                    onChange={handleChange("comuna")}
-                    readOnly={!editing}
-                  />
+                  <select
+                      className="form-select"
+                      value={form.comuna}
+                      onChange={handleSelect("comuna")}
+                      disabled={!editing || !form.region} 
+                    >
+                      <option value="">Selecciona tu comuna</option>
+                      {comunasDisponibles.map((comuna) => (
+                        <option key={comuna} value={comuna}>
+                          {comuna}
+                        </option>
+                      ))}
+                  </select>
                 </div>
-              </div>
-
+              
               <div className="d-flex justify-content-end mt-4">
                 {editing ? (
                   <>
@@ -361,5 +415,6 @@ export default function Perfil() {
         </div>
       </div>
     </div>
+  </div>  
   );
 }

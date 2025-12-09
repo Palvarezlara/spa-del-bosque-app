@@ -93,6 +93,14 @@ export default function App() {
         <Route path="blogs" element={<AdminBlogs />} />
         {/* /admin/reportes */}
         <Route path="reportes" element={<AdminReporte />} />
+        <Route
+          path="*"
+          element={
+            <div className="container py-4">
+              Admin — sección no encontrada
+            </div>
+          }
+        />
       </Route>
     </Routes>
   );
