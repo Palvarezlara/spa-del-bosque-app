@@ -93,14 +93,14 @@ export default function RegisterForm() {
       <div className="mb-3">
         <label htmlFor="password" className="form-label">Contraseña</label>
         <input id="password" type="password" className="form-control"
-               required minLength={4} maxLength={10}
+               required minLength={4} maxLength={12}
                value={form.password} onChange={onChange} />
       </div>
 
       <div className="mb-3">
         <label htmlFor="password2" className="form-label">Confirmar contraseña</label>
         <input id="password2" type="password" className="form-control"
-               required minLength={4} maxLength={10}
+               required minLength={4} maxLength={12}
                value={form.password2} onChange={onChange} />
       </div>
 
@@ -136,7 +136,7 @@ export default function RegisterForm() {
                   className="form-select"
                   value={form.comuna}
                   onChange={handleChange("comuna")}
-                  disabled={!form.region}   // 👈 deshabilitado si no hay región
+                  disabled={!form.region}   
                 >
                   <option value="">Selecciona tu comuna</option>
                   {comunasDisponibles.map((comuna) => (

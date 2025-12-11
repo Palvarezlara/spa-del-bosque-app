@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -10,9 +10,15 @@ export default function Checkout() {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const displayName = user
+    ? `${user.nombres ?? user.nombre ?? ""} ${user.apellidos ?? user.apellido ?? ""}`.trim()
+    : "";
+
 
     // Formulario de datos de cliente / reserva
     const [form, setForm] = useState({
+        nombre: displayName || '',
+        email: user?.email || '',
         telefono: user?.telefono || '',
         fechaPreferida: '',
         horarioPreferido: '',
@@ -21,6 +27,18 @@ export default function Checkout() {
     });
 
     const isEmpty = !items.length === 0;
+
+    useEffect(() => {
+      if (user) {
+        setForm((prev) => ({
+          ...prev,
+          nombre: displayName || prev.nombre,
+          email: user.email || prev.email,
+          telefono: user.telefono || prev.telefono,
+        }));
+      }
+    }, [user, displayName]);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -45,6 +63,9 @@ export default function Checkout() {
             itemsCount: items.length,
             orderId: `ORD-${Date.now().toString(36).toUpperCase().slice(-6)}`,
             reserva: {
+                compradorId: user?.id || null,
+                compradorNombre: displayName || form.nombre,
+                compradorEmail: user?.email || form.email,
                 telefono: form.telefono,
                 fechaPreferida: form.fechaPreferida || null,
                 horarioPreferido: form.horarioPreferido || null,
@@ -75,7 +96,7 @@ export default function Checkout() {
                 {user ? (
                     <>
                         Comprador:{' '}
-                        <strong>{user.nombre}</strong> ({user.email})
+                        <strong>{displayName || user.email}</strong> ({user.email})
                     </>
                 ) : (
                     'Debes iniciar sesión para completar la reserva.'
@@ -122,7 +143,8 @@ export default function Checkout() {
                         </table>
                     </div>
 
-                    <div className="row g-4">
+                  <div className="row g-4">
+
             {/* Información del cliente */}
             <div className="col-md-6">
               <div className="card border-soft">
@@ -133,7 +155,7 @@ export default function Checkout() {
                     <input
                       type="text"
                       className="form-control"
-                      value={user?.nombre || ''}
+                      value={displayName}
                       disabled
                     />
                   </div>

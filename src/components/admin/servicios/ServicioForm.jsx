@@ -7,7 +7,9 @@ export default function ServicioForm({ onSubmit, initialData, onCancel }) {
     categoria: "",
     precio: "",
     duracion: "",
-    estado: "activo",
+    descripcion: "",
+    imageUrl: "",    
+    estado: "activo"
   });
 
   useEffect(() => {
@@ -18,6 +20,8 @@ export default function ServicioForm({ onSubmit, initialData, onCancel }) {
         categoria: initialData.categoria || "",
         precio: initialData.precio ?? "",
         duracion: initialData.duracionMin ?? "",
+        descripcion: initialData.descripcion || "",
+        imageUrl: initialData.imageUrl || "",
         estado: initialData.activo ? "activo" : "inactivo",
       });
     } else {
@@ -27,6 +31,8 @@ export default function ServicioForm({ onSubmit, initialData, onCancel }) {
         categoria: "",
         precio: "",
         duracion: "",
+        descripcion: "",
+        imageUrl: "",
         estado: "activo",
       });
     }
@@ -101,6 +107,25 @@ export default function ServicioForm({ onSubmit, initialData, onCancel }) {
           name="duracion"
           className="form-control"
           value={form.duracion}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="col-12">
+        <label className="form-label">Descripción</label>
+        <textarea
+          name="descripcion"
+          className="form-control"
+          value={form.descripcion}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="col-12">
+        <label className="form-label">Imagen URL</label>
+        <input
+          type="text"
+          name="imageUrl"
+          className="form-control"
+          value={form.imageUrl}
           onChange={handleChange}
         />
       </div>

@@ -53,9 +53,12 @@ export default function AdminServicios() {
         categoria: formData.categoria || "masajes",
         precio: Number(formData.precio ?? 0),
         duracionMin: Number(formData.duracion ?? formData.duracionMin ?? 0),
+        descripcion: (formData.descripcion ?? "").trim() || null,
+        imageUrl: (formData.imageUrl ?? "").trim() || null, 
         activo:
           formData.estado === "activo" ||
-          formData.activo === true,
+          formData.activo === true
+         
       };
 
       if (!payload.sku || !payload.nombre) {
