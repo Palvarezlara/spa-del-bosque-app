@@ -304,7 +304,7 @@ El sistema está desplegado en AWS con la siguiente arquitectura:
   - Comunicación frontend–backend:
       - El frontend consume los endpoints a través del Gateway usando la variable:
         ```
-        // src/api/httpClient.js
+      
         const baseUrl =
           import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';        
         ```
